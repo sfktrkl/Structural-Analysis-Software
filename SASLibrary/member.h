@@ -10,7 +10,6 @@ class SASLIBRARYSHARED_EXPORT Member
     MAKE_TESTABLE(Member);
 
 public:
-    //
     Member(unsigned int uiNode1,unsigned int uiNode2,double dbElasticModulus,double dbHeight,double dbWidth,double dbLength,double dbCos,double dbSin);
 
     static unsigned int numOfMembers;
