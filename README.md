@@ -12,4 +12,4 @@ Contributing: Any suggestions are welcome. Send e-mail to sfktrkl@gmail.com
 
 Credits: Şafak Türkeli, Middle East Technical University Civil Engineering Student, https://github.com/sfktrkl
 
-License:
+License: MIT License
