@@ -1,5 +1,3 @@
 TEMPLATE = subdirs  
-SUBDIRS += SAS \
-    SASLibrary \
-    SASTest \
-    SASStaticLibrary
+CONFIG+=ordered
+SUBDIRS += SASStaticLibrary SASLibrary SASTest SAS

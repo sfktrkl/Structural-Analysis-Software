@@ -141,8 +141,9 @@ void TestCase::complexExampleTest(){
 
 }
 void TestCase::xmlOpenTest(){
-    QString filename = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation) + "/test1.xml";
-    MainWindow::OpenXML(filename);
+    // Adjust your file path
+    QString filePath = "D:/GoogleDrive/Programs/c++/SASWithTest/SASTest/test1.xml";
+    MainWindow::OpenXML(filePath);
     QCOMPARE(int(MainWindow::members[0].GetLocalFEMMatrix()[1][0]),int(845));
     QCOMPARE(int(MainWindow::members[0].GetGlobalFEMMatrix()[4][0]),int(845));
     MainWindow::solveStructure();
@@ -152,8 +153,9 @@ void TestCase::xmlOpenTest(){
 }
 
 void TestCase::xmlOpenTest2(){
-    QString filename = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation) + "/test2.xml";
-    MainWindow::OpenXML(filename);
+    // Adjust your file path
+    QString filePath = "D:/GoogleDrive/Programs/c++/SASWithTest/SASTest/test2.xml";
+    MainWindow::OpenXML(filePath);
     MainWindow::solveStructure();
     QCOMPARE(int(MainWindow::members[2].GetLocalMatrix()[2][1]),int(11999));
     QCOMPARE(int(MainWindow::members[2].GetGlobalMatrix()[1][1]),int(14419));
@@ -163,6 +165,7 @@ void TestCase::xmlOpenTest2(){
     bool comparison = MainWindow::Deflections[0][0] < -0.0015 && MainWindow::Deflections[0][0] > -0.0016;
     QVERIFY(comparison);
 }
+
 
 QTEST_MAIN(TestCase)
 
