@@ -1,0 +1,12 @@
+<Class>
+ <Nodes>
+	<Node Z_Direction_Fixity="true" Z_Force="0" X_Direction_Fixity="true" Y_Coordinate="0" X_Coordinate="0" ID="0" X_Stiffness="0" Y_Stiffness="0" Z_Stiffness="0" Y_Force="0" Y_Direction_Fixity="true" X_Force="0"/>
+	<Node Z_Direction_Fixity="false" Z_Force="0" X_Direction_Fixity="true" Y_Coordinate="0" X_Coordinate="13" ID="1" X_Stiffness="0" Y_Stiffness="0" Z_Stiffness="1000" Y_Force="0" Y_Direction_Fixity="true" X_Force="0"/>
+ </Nodes>
+ <Members>
+	<Member Elastic_Modulus="20000" Cos="1" Height="1" Second_Node="1" Length="13" ID="0" First_Node="0" Unit_Weight="10" Load_Node1="-130" Sin="0" Load_Node2="-130" Width="12"/>
+ </Members>
+ <OpenGL>
+	<Grid xGrid="15" yGrid="5"/>
+</OpenGL>
+</Class>

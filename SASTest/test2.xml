@@ -1,0 +1,16 @@
+<Class>
+ <Nodes>
+	<Node ID="0" Z_Direction_Fixity="true" Y_Stiffness="0" Z_Stiffness="0" Z_Force="0" Y_Force="0" X_Force="0" X_Direction_Fixity="true" Y_Direction_Fixity="true" X_Coordinate="0" Y_Coordinate="0" X_Stiffness="0"/>
+	<Node ID="1" Z_Direction_Fixity="false" Y_Stiffness="100" Z_Stiffness="0" Z_Force="0" Y_Force="0" X_Force="0" X_Direction_Fixity="false" Y_Direction_Fixity="false" X_Coordinate="5" Y_Coordinate="0" X_Stiffness="0"/>
+	<Node ID="2" Z_Direction_Fixity="false" Y_Stiffness="0" Z_Stiffness="100" Z_Force="0" Y_Force="-100" X_Force="0" X_Direction_Fixity="false" Y_Direction_Fixity="false" X_Coordinate="5" Y_Coordinate="2" X_Stiffness="0"/>
+	<Node ID="3" Z_Direction_Fixity="false" Y_Stiffness="0" Z_Stiffness="0" Z_Force="0" Y_Force="0" X_Force="0" X_Direction_Fixity="true" Y_Direction_Fixity="false" X_Coordinate="8" Y_Coordinate="3" X_Stiffness="0"/>
+ </Nodes>
+ <Members>
+	<Member ID="0" First_Node="0" Unit_Weight="0" Cos="1" Sin="0" Second_Node="1" Load_Node2="-10" Load_Node1="-10" Height="1" Length="5" Elastic_Modulus="20000" Width="12"/>
+	<Member ID="1" First_Node="1" Unit_Weight="0" Cos="0" Sin="1" Second_Node="2" Load_Node2="0" Load_Node1="0" Height="1" Length="2" Elastic_Modulus="20000" Width="12"/>
+	<Member ID="2" First_Node="2" Unit_Weight="0" Cos="0.948683" Sin="0.316228" Second_Node="3" Load_Node2="0" Load_Node1="0" Height="1" Length="3.16228" Elastic_Modulus="20000" Width="12"/>
+ </Members>
+ <OpenGL>
+	<Grid xGrid="10" yGrid="5"/>
+</OpenGL>
+</Class>

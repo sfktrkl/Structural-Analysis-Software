@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file alias="icon">building-construction-icon.png</file>
+        <file alias="IconUpdated">myappico.ico</file>
+        <file alias="open">folder.png</file>
+        <file alias="forces">force.png</file>
+        <file alias="new">empty.png</file>
+        <file alias="structure">building.png</file>
+        <file alias="supports">triangle.png</file>
+        <file alias="save">save.png</file>
+        <file alias="members">members.png</file>
+        <file alias="internal">arrows.png</file>
+    </qresource>
+</RCC>
