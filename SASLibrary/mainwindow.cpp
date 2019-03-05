@@ -83,10 +83,6 @@ void MainWindow::on_createMember_released()
     unsigned int uiNode1 = QString(ui->mNode1->text()).toUInt();
     unsigned int uiNode2 = QString(ui->mNode2->text()).toUInt();
 
-    double dbE = QString(ui->mElastic->text()).toDouble();
-    double dbHeight = QString(ui->mHeight->text()).toDouble();
-    double dbWidth = QString(ui->mWidth->text()).toDouble();
-
     double xCoor = qFabs(nodes[uiNode1].GetXCoordinate()-nodes[uiNode2].GetXCoordinate());
     double yCoor = qFabs(nodes[uiNode1].GetYCoordinate()-nodes[uiNode2].GetYCoordinate());
     double dbLength = sqrt(pow(xCoor,2)+pow(yCoor,2));
@@ -94,7 +90,11 @@ void MainWindow::on_createMember_released()
     double dbCos = (nodes[uiNode2].GetXCoordinate()-nodes[uiNode1].GetXCoordinate())/dbLength;
     double dbSin = (nodes[uiNode2].GetYCoordinate()-nodes[uiNode1].GetYCoordinate())/dbLength;
 
-    members.push_back(Member(uiNode1,uiNode2,dbE,dbHeight,dbWidth,dbLength,dbCos,dbSin));
+    double dbE = QString(ui->mElastic->text()).toDouble();
+    double dbHeight = QString(ui->mHeight->text()).toDouble();
+    double dbWidth = QString(ui->mWidth->text()).toDouble();
+
+    members.push_back(Member(nodes[uiNode1],nodes[uiNode2],dbE,dbHeight,dbWidth,dbLength,dbCos,dbSin));
 
     ui->memberList->addItem(QString::number(Member::numOfMembers-1));
     ui->mNode1->selectAll();
@@ -175,9 +175,9 @@ void MainWindow::on_nodeList_itemClicked(QListWidgetItem *item)
         ui->zFixity->setChecked(0);
     }
 
-    ui->xForce->setText(QString::number(nodes[uiData].GetNodeForces()[0]));
-    ui->yForce->setText(QString::number(nodes[uiData].GetNodeForces()[1]));
-    ui->zForce->setText(QString::number(nodes[uiData].GetNodeForces()[2]));
+    ui->xForce->setText(QString::number(nodes[uiData].nodeForces.get()[0]));
+    ui->yForce->setText(QString::number(nodes[uiData].nodeForces.get()[1]));
+    ui->zForce->setText(QString::number(nodes[uiData].nodeForces.get()[2]));
 
     ui->changeNode->setEnabled(1);
 
@@ -206,13 +206,13 @@ void MainWindow::on_memberList_itemClicked(QListWidgetItem *item)
     ui->mHeight->setText(QString::number(members[uiData].GetMemberProperties()[1]));
     ui->mWidth->setText(QString::number(members[uiData].GetMemberProperties()[2]));
 
-    ui->mNode1->setText(QString::number(members[uiData].GetMemberNodes()[0]));
-    ui->mNode2->setText(QString::number(members[uiData].GetMemberNodes()[1]));
+    ui->mNode1->setText(QString::number(members[uiData].memberNodes[0].getNodeId()));
+    ui->mNode2->setText(QString::number(members[uiData].memberNodes[1].getNodeId()));
 
-    ui->lNode1->setText(QString::number(members[uiData].getLoadNode1()+members[uiData].GetUnitWeight()*members[uiData].GetArea()*members[uiData].GetCos()));
-    ui->lNode2->setText(QString::number(members[uiData].getLoadNode2()+members[uiData].GetUnitWeight()*members[uiData].GetArea()*members[uiData].GetCos()));
+    ui->lNode1->setText(QString::number(members[uiData].memberLoads.get()[0]+members[uiData].memberMaterial.unitWeight()*members[uiData].memberMaterial.area()*members[uiData].GetCos()));
+    ui->lNode2->setText(QString::number(members[uiData].memberLoads.get()[0]+members[uiData].memberMaterial.unitWeight()*members[uiData].memberMaterial.area()*members[uiData].GetCos()));
 
-    ui->unitWeight->setText(QString::number(members[uiData].GetUnitWeight()));
+    ui->unitWeight->setText(QString::number(members[uiData].memberMaterial.unitWeight()));
     ui->changeMember->setEnabled(1);
     ui->addLoad->setEnabled(1);
     ui->addLoad->setText("Add/Change \nLoads");
@@ -237,7 +237,7 @@ void MainWindow::on_changeMember_released()
     double dbCos = (nodes[uiNode2].GetXCoordinate()-nodes[uiNode1].GetXCoordinate())/dbLength;
     double dbSin = (nodes[uiNode2].GetYCoordinate()-nodes[uiNode1].GetYCoordinate())/dbLength;
 
-    members[uiData].SetMemberNodes(uiNode1,uiNode2);
+    members[uiData].setNodes(nodes[uiNode1],nodes[uiNode2]);
     members[uiData].SetMemberProperties(dbE,dbHeight,dbWidth,dbLength,dbCos,dbSin);
 
     ui->changeMember->setEnabled(0);
@@ -259,13 +259,13 @@ void MainWindow::on_SelfWeight_released()
 {
     double unitWeight = QString(ui->unitWeight->text()).toDouble();
     for (unsigned int i = 0;i<Member::numOfMembers;i++){
-        members[i].SetUnitWeight(unitWeight);
+        members[i].memberMaterial.setUnitWeight(unitWeight);
     }
 
     for (unsigned int i = 0;i<Member::numOfMembers;i++){
-        members[i].SetLoads(-members[i].GetArea()*unitWeight*members[i].GetCos(),-members[i].GetArea()*unitWeight*members[i].GetCos());
-        nodes[members[i].GetMemberNodes()[0]].SetNodeForces(-members[i].GetLenght()*members[i].GetArea()*unitWeight*members[i].GetSin()*members[i].GetCos()
-                                                            ,-members[i].GetLenght()*members[i].GetArea()*unitWeight*members[i].GetSin()*members[i].GetSin()
+        members[i].SetLoads(-members[i].memberMaterial.area()*unitWeight*members[i].GetCos(),-members[i].memberMaterial.area()*unitWeight*members[i].GetCos());
+        nodes[members[i].memberNodes[0].getNodeId()].SetNodeForces(-members[i].GetLenght()*members[i].memberMaterial.area()*unitWeight*members[i].GetSin()*members[i].GetCos()
+                                                            ,-members[i].GetLenght()*members[i].memberMaterial.area()*unitWeight*members[i].GetSin()*members[i].GetSin()
                                                             ,0);
     }
 

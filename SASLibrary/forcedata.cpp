@@ -59,7 +59,7 @@ void forceData::on_nodeList_itemClicked(QListWidgetItem *item)
     unsigned int uiData = sData.toUInt();
 
     for (unsigned int i = 0; i<3;i++){
-            ui->nodeForces->setItem(int(i),int(0),new QTableWidgetItem(QString::number(MainWindow::nodes[uiData].GetNodeForces()[i])));
+            ui->nodeForces->setItem(int(i),int(0),new QTableWidgetItem(QString::number(MainWindow::nodes[uiData].nodeForces.get()[i])));
     }
 
     ui->refresh_2->setEnabled(1);

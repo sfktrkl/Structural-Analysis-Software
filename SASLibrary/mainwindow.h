@@ -18,7 +18,6 @@ class SASLIBRARYSHARED_EXPORT MainWindow : public QMainWindow
 {
     Q_OBJECT
     MAKE_TESTABLE(MainWindow);
-    friend class TestCase;
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
@@ -83,8 +82,6 @@ private slots:
     void on_yFixity_stateChanged(int arg1);
 
     void on_zFixity_stateChanged(int arg1);
-
-
 
 private:
     Ui::MainWindow *ui;

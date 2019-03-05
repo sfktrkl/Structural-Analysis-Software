@@ -67,7 +67,7 @@ void MainWindow::solveStructure()
         for (unsigned int j = 0;j<3;j++){
             if (nodes[i].GetDofNumbers()[j] != 0){
                 tempForceMatrix[nodes[i].GetDofNumbers()[j]-1][0]
-                        = tempForceMatrix[nodes[i].GetDofNumbers()[j]-1][0] + nodes[i].GetNodeForces()[j];
+                        = tempForceMatrix[nodes[i].GetDofNumbers()[j]-1][0] + nodes[i].nodeForces.get()[j];
             }
         }
     }
@@ -133,17 +133,17 @@ void MainWindow::WriteXML(QString fileName){
     for(unsigned int i = 0;i < Member::numOfMembers ;i++){
         QDomElement memberelement = document.createElement("Member");
         memberelement.setAttribute("ID", QString::number(i));
-        memberelement.setAttribute("First_Node", QString::number(MainWindow::members[i].GetMemberNodes()[0]));
-        memberelement.setAttribute("Second_Node", QString::number(MainWindow::members[i].GetMemberNodes()[1]));
-        memberelement.setAttribute("Elastic_Modulus", QString::number(MainWindow::members[i].GetMemberPropertiesForXML()[0]));
-        memberelement.setAttribute("Height", QString::number(MainWindow::members[i].GetMemberPropertiesForXML()[1]));
-        memberelement.setAttribute("Width", QString::number(MainWindow::members[i].GetMemberPropertiesForXML()[2]));
+        memberelement.setAttribute("First_Node", QString::number(MainWindow::members[i].memberNodes[0].getNodeId()));
+        memberelement.setAttribute("Second_Node", QString::number(MainWindow::members[i].memberNodes[1].getNodeId()));
+        memberelement.setAttribute("Elastic_Modulus", QString::number(MainWindow::members[i].memberMaterial.elasticModulus()));
+        memberelement.setAttribute("Height", QString::number(MainWindow::members[i].memberMaterial.height()));
+        memberelement.setAttribute("Width", QString::number(MainWindow::members[i].memberMaterial.width()));
         memberelement.setAttribute("Length", QString::number(MainWindow::members[i].GetMemberPropertiesForXML()[3]));
         memberelement.setAttribute("Cos", QString::number(MainWindow::members[i].GetMemberPropertiesForXML()[4]));
         memberelement.setAttribute("Sin", QString::number(MainWindow::members[i].GetMemberPropertiesForXML()[5]));
         memberelement.setAttribute("Load_Node1", QString::number(MainWindow::members[i].GetLoads()[0]));
         memberelement.setAttribute("Load_Node2", QString::number(MainWindow::members[i].GetLoads()[1]));
-        memberelement.setAttribute("Unit_Weight", QString::number(MainWindow::members[i].GetUnitWeight()));
+        memberelement.setAttribute("Unit_Weight", QString::number(MainWindow::members[i].memberMaterial.unitWeight()));
         member.appendChild(memberelement);
     }
 
@@ -262,8 +262,8 @@ void MainWindow::OpenXML(QString fileName){
 
             double unitWeight = double(QString(memberelement.attribute("Unit_Weight")).toDouble());
 
-            MainWindow::members.push_back(Member(uiNode1,uiNode2,dbE,dbHeight,dbWidth,dbLength,dbCos,dbSin));
-            MainWindow::members[memberId].SetUnitWeight(unitWeight);
+            MainWindow::members.push_back(Member(nodes[uiNode1],nodes[uiNode2],dbE,dbHeight,dbWidth,dbLength,dbCos,dbSin));
+            MainWindow::members[memberId].memberMaterial.setUnitWeight(unitWeight);
             MainWindow::members[memberId].SetLoads(dbLoad1,dbLoad2);
 
             mainW.ui->openGLWidget->LineDraw(nodes[uiNode1].GetXCoordinate(),nodes[uiNode1].GetYCoordinate(),nodes[uiNode2].GetXCoordinate(),nodes[uiNode2].GetYCoordinate());

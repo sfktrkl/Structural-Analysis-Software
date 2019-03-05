@@ -97,14 +97,14 @@ void TestCase::nodeTest(){
     QCOMPARE(Node::numOfNodes,static_cast<unsigned int>(2));
     QCOMPARE(Node::numOfDofs-1,static_cast<unsigned int>(2));
     QCOMPARE(MainWindow::nodes[0].GetStiffness()[2],1000);
-    QCOMPARE(MainWindow::nodes[0].GetNodeForces()[0],100);
+    QCOMPARE(MainWindow::nodes[0].nodeForces.get()[0],100);
 }
 
 void TestCase::memberTest(){
     MainWindow::clearAll();
     MainWindow::nodes.push_back(Node(true,true,false,0,0,0,0,0,0,0,0));
     MainWindow::nodes.push_back(Node(true,true,false,0,0,1000,13,0,0,0,0));
-    MainWindow::members.push_back(Member(0,1,20000,1,12,13,1,0));
+    MainWindow::members.push_back(Member(MainWindow::nodes[0],MainWindow::nodes[1],20000,1,12,13,1,0));
     QCOMPARE(Member::numOfMembers,static_cast<unsigned int>(1));
     QCOMPARE(int(MainWindow::members[0].GetLocalMatrix()[0][0]),int(18461));
     QCOMPARE(int(MainWindow::members[0].GetRotationMatrix()[3][3]),int(1));
@@ -115,7 +115,7 @@ void TestCase::firstExampleTest(){
     MainWindow::clearAll();
     MainWindow::nodes.push_back(Node(true,true,false,0,0,0,0,0,0,0,0));
     MainWindow::nodes.push_back(Node(true,true,false,0,0,1000,13,0,0,0,0));
-    MainWindow::members.push_back(Member(0,1,20000,1,12,13,1,0));
+    MainWindow::members.push_back(Member(MainWindow::nodes[0],MainWindow::nodes[1],20000,1,12,13,1,0));
     MainWindow::members[0].SetLoads(-10,-10);
     QCOMPARE(int(MainWindow::members[0].GetLocalFEMMatrix()[1][0]),int(65));
     QCOMPARE(int(MainWindow::members[0].GetGlobalFEMMatrix()[4][0]),int(65));
@@ -126,10 +126,10 @@ void TestCase::complexExampleTest(){
     MainWindow::nodes.push_back(Node(false,false,false,0,100,0,5,0,0,0,0));
     MainWindow::nodes.push_back(Node(false,false,false,0,0,100,5,2,0,-100,0));
     MainWindow::nodes.push_back(Node(true,false,false,0,0,0,8,3,0,0,0));
-    MainWindow::members.push_back(Member(0,1,20000,1,12,5,1,0));
+    MainWindow::members.push_back(Member(MainWindow::nodes[0],MainWindow::nodes[1],20000,1,12,5,1,0));
     MainWindow::members[0].SetLoads(-10,-10);
-    MainWindow::members.push_back(Member(1,2,20000,1,12,2,0,1));
-    MainWindow::members.push_back(Member(2,3,20000,1,12,sqrt(10),3/sqrt(10),1/sqrt(10)));
+    MainWindow::members.push_back(Member(MainWindow::nodes[1],MainWindow::nodes[2],20000,1,12,2,0,1));
+    MainWindow::members.push_back(Member(MainWindow::nodes[2],MainWindow::nodes[3],20000,1,12,sqrt(10),3/sqrt(10),1/sqrt(10)));
     MainWindow::solveStructure();
     QCOMPARE(int(MainWindow::members[2].GetLocalMatrix()[2][1]),int(11999));
     QCOMPARE(int(MainWindow::members[2].GetGlobalMatrix()[1][1]),int(14419));
@@ -140,6 +140,7 @@ void TestCase::complexExampleTest(){
     QVERIFY(comparison);
 
 }
+
 void TestCase::xmlOpenTest(){
     // Adjust your file path
     QString filePath = "D:/GoogleDrive/Programs/c++/SASWithTest/SASTest/test1.xml";
@@ -165,7 +166,6 @@ void TestCase::xmlOpenTest2(){
     bool comparison = MainWindow::Deflections[0][0] < -0.0015 && MainWindow::Deflections[0][0] > -0.0016;
     QVERIFY(comparison);
 }
-
 
 QTEST_MAIN(TestCase)
 

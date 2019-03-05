@@ -34,7 +34,9 @@ SOURCES += \
     structuredata.cpp \
     forcedata.cpp \
     glwidget.cpp \
-    mainwindowstatics.cpp
+    mainwindowstatics.cpp \
+    material.cpp \
+    loads.cpp
 
 HEADERS += \
         saslibrary.h \
@@ -45,7 +47,9 @@ HEADERS += \
     memberdata.h \
     structuredata.h \
     forcedata.h \
-    glwidget.h
+    glwidget.h \
+    material.h \
+    loads.h
 
 FORMS += \
         mainwindow.ui \

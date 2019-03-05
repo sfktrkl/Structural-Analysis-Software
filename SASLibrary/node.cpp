@@ -39,9 +39,10 @@ Node::Node(bool bXFixity, bool bYFixity, bool bZFixity,double dbXStiffness,doubl
     this->dbCoordinates.push_back(dbXCoordinate);
     this->dbCoordinates.push_back(dbYCoordinate);
 
-    this->dbForce[0] = this->dbForce[0] + dbXForce;
-    this->dbForce[1] = this->dbForce[1] + dbYForce;
-    this->dbForce[2] = this->dbForce[2] + dbZForce;
+    std::vector<double> forces{this->nodeForces.get()[0]+dbXForce,this->nodeForces.get()[1]+dbYForce,this->nodeForces.get()[2]+dbZForce};
+
+    this->nodeForces.setLoads(forces);
+
 
     this->nodeId=numOfNodes;
     Node::numOfNodes++;
@@ -87,9 +88,8 @@ void Node::SetNodeFixity(bool bXFixity, bool bYFixity, bool bZFixity){
 }
 
 void Node::SetNodeForces(double dbXForce, double dbYForce, double dbZForce){
-    this->dbForce[0] = this->dbForce[0] + dbXForce;
-    this->dbForce[1] = this->dbForce[1] + dbYForce;
-    this->dbForce[2] = this->dbForce[2] + dbZForce;
+    std::vector<double> forces{dbXForce,dbYForce,dbZForce};
+    this->nodeForces.setLoads(forces);
 }
 
 std::vector<double> Node::GetNodePropertiesForXML(){
@@ -99,9 +99,9 @@ std::vector<double> Node::GetNodePropertiesForXML(){
     vecProperties.push_back(this->vecStiffness[2]);
     vecProperties.push_back(this->dbCoordinates[0]);
     vecProperties.push_back(this->dbCoordinates[1]);
-    vecProperties.push_back(this->dbForce[0]);
-    vecProperties.push_back(this->dbForce[1]);
-    vecProperties.push_back(this->dbForce[2]);
+    vecProperties.push_back(this->nodeForces.get()[0]);
+    vecProperties.push_back(this->nodeForces.get()[1]);
+    vecProperties.push_back(this->nodeForces.get()[2]);
     return vecProperties;
 }
 
