@@ -7,7 +7,7 @@
 QT       += widgets qml quick opengl sql script scripttools xml xmlpatterns testlib
 QT       += core gui opengl
 QT       += xml
-LIBS     += -lopengl32
+LIBS     += -lopengl32 -lglu32
 greaterThan(QT_MAJOR_VERSION, 4): QT += printsupport
 
 TARGET = SASLibrary
@@ -36,7 +36,9 @@ SOURCES += \
     glwidget.cpp \
     mainwindowstatics.cpp \
     material.cpp \
-    loads.cpp
+    loads.cpp \
+    glwidget3d.cpp \
+    opengl3d.cpp
 
 HEADERS += \
         saslibrary.h \
@@ -49,13 +51,16 @@ HEADERS += \
     forcedata.h \
     glwidget.h \
     material.h \
-    loads.h
+    loads.h \
+    glwidget3d.h \
+    opengl3d.h
 
 FORMS += \
         mainwindow.ui \
     memberdata.ui \
     structuredata.ui \
-    forcedata.ui
+    forcedata.ui \
+    opengl3d.ui
 unix {
     target.path = /usr/lib
     INSTALLS += target

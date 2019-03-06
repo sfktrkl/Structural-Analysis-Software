@@ -8,7 +8,6 @@
 #include <GL/glu.h>
 #include <GL/gl.h>
 #include "saslibrary_global.h"
-#include "QPainter"
 
 class SASLIBRARYSHARED_EXPORT GLWidget : public QGLWidget
 {

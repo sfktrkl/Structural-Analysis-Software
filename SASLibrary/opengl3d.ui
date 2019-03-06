@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>OpenGL3D</class>
+ <widget class="QDialog" name="OpenGL3D">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>900</width>
+    <height>700</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>3D View</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../SAS/resources.qrc">
+    <normaloff>:/new/prefix1/3d</normaloff>:/new/prefix1/3d</iconset>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="GLWidget3D" name="OpenGL3DWidget" native="true"/>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>GLWidget3D</class>
+   <extends>QWidget</extends>
+   <header location="global">glwidget3d.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../SAS/resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>

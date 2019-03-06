@@ -10,5 +10,6 @@
         <file alias="save">save.png</file>
         <file alias="members">members.png</file>
         <file alias="internal">arrows.png</file>
+        <file alias="3d">3d.png</file>
     </qresource>
 </RCC>

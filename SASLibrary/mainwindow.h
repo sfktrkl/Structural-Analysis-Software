@@ -83,6 +83,8 @@ private slots:
 
     void on_zFixity_stateChanged(int arg1);
 
+    void on_action3D_View_triggered();
+
 private:
     Ui::MainWindow *ui;
 };

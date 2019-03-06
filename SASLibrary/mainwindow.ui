@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1412</width>
-    <height>548</height>
+    <height>550</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -1015,6 +1015,7 @@ Member</string>
     <addaction name="actionStructure"/>
     <addaction name="actionInternal_Forces"/>
     <addaction name="actionSupports"/>
+    <addaction name="action3D_View"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuPlots"/>
@@ -1035,6 +1036,8 @@ Member</string>
    <addaction name="actionStructure"/>
    <addaction name="actionInternal_Forces"/>
    <addaction name="actionSupports"/>
+   <addaction name="separator"/>
+   <addaction name="action3D_View"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionNew">
@@ -1107,6 +1110,15 @@ Member</string>
    </property>
    <property name="text">
     <string>Internal Forces</string>
+   </property>
+  </action>
+  <action name="action3D_View">
+   <property name="icon">
+    <iconset resource="../SAS/resources.qrc">
+     <normaloff>:/new/prefix1/3d</normaloff>:/new/prefix1/3d</iconset>
+   </property>
+   <property name="text">
+    <string>3D View</string>
    </property>
   </action>
  </widget>

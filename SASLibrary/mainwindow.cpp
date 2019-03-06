@@ -19,6 +19,7 @@
 #include <sstream>
 #include "saslibrary_global.h"
 #include "sasstaticlibrary_global.h"
+#include "opengl3d.h"
 
 std::vector<Node> MainWindow::nodes;
 std::vector<Member> MainWindow::members;
@@ -288,7 +289,6 @@ void MainWindow::on_actionMembers_triggered()
 // solves the problem and displays structureData Ui
 void MainWindow::on_solve_released()
 {
-
     solveStructure();
     structureData structureDataUi;
     structureDataUi.setModal(true);
@@ -314,6 +314,14 @@ void MainWindow::on_actionForces_triggered()
     forceDataUi.setModal(true);
     forceDataUi.exec();
 }
+
+void MainWindow::on_action3D_View_triggered()
+{
+    OpenGL3D openglWindow;
+    openglWindow.setModal(true);
+    openglWindow.exec();
+}
+
 // saves file to XML
 void MainWindow::on_actionSave_triggered()
 {
@@ -472,3 +480,5 @@ void MainWindow::drawNodes(bool bXFixity,bool bYFixity,bool bZFixity,int iXStiff
         }
     }
 }
+
+

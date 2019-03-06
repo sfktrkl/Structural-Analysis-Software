@@ -2,9 +2,12 @@
 #define LOADS_H
 
 #include <vector>
+#include "saslibrary_global.h"
 
-class Loads
+class SASLIBRARYSHARED_EXPORT Loads
 {
+    MAKE_TESTABLE(Loads);
+
 public:
     Loads();
     Loads(std::vector<double> Load);
