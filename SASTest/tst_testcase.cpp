@@ -75,7 +75,7 @@ void TestCase::initialValueTest()
 {
     QCOMPARE(Node::numOfNodes,Member::numOfMembers);
 }
-
+// testing transpose function
 void TestCase::transposeTest()
 {
     std::vector<std::vector<double>> given{{1,1,1,1,1,1},{2,2,2,2,2,2},{3,3,3,3,3,3},{4,4,4,4,4,4},{5,5,5,5,5,5},{6,6,6,6,6,6}};
@@ -83,13 +83,14 @@ void TestCase::transposeTest()
     std::vector<std::vector<double>> verified{{1,2,3,4,5,6},{1,2,3,4,5,6},{1,2,3,4,5,6},{1,2,3,4,5,6},{1,2,3,4,5,6},{1,2,3,4,5,6}};
     QCOMPARE(calculated,verified);
 }
+// testing gauss jordan function
 void TestCase::gaussJordanTest(){
     std::vector<std::vector<double>> given{{1,2,4},{4,5,2},{1,2,3}};
     std::vector<std::vector<double>> given2{{1},{6},{3}};
     std::vector<std::vector<double>> calculated = gaussJordan(given,given2);
     QCOMPARE(calculated[2][0],double(-2));
 }
-
+// testing created nodes
 void TestCase::nodeTest(){
     MainWindow::clearAll();
     MainWindow::nodes.push_back(Node(true,true,false,0,0,1000,0,0,100,0,0));
@@ -99,7 +100,7 @@ void TestCase::nodeTest(){
     QCOMPARE(MainWindow::nodes[0].GetStiffness()[2],1000);
     QCOMPARE(MainWindow::nodes[0].nodeForces.get()[0],100);
 }
-
+// testing created members
 void TestCase::memberTest(){
     MainWindow::clearAll();
     MainWindow::nodes.push_back(Node(true,true,false,0,0,0,0,0,0,0,0));
@@ -110,7 +111,7 @@ void TestCase::memberTest(){
     QCOMPARE(int(MainWindow::members[0].GetRotationMatrix()[3][3]),int(1));
     QCOMPARE(int(MainWindow::members[0].GetGlobalMatrix()[5][5]),int(6153));
 }
-
+// solves a simple example
 void TestCase::firstExampleTest(){
     MainWindow::clearAll();
     MainWindow::nodes.push_back(Node(true,true,false,0,0,0,0,0,0,0,0));
@@ -120,6 +121,7 @@ void TestCase::firstExampleTest(){
     QCOMPARE(int(MainWindow::members[0].GetLocalFEMMatrix()[1][0]),int(65));
     QCOMPARE(int(MainWindow::members[0].GetGlobalFEMMatrix()[4][0]),int(65));
 }
+// solves an example and compares deflection results
 void TestCase::complexExampleTest(){
     MainWindow::clearAll();
     MainWindow::nodes.push_back(Node(true,true,true,0,0,0,0,0,0,0,0));
@@ -140,7 +142,7 @@ void TestCase::complexExampleTest(){
     QVERIFY(comparison);
 
 }
-
+// tests OpenXml functiom
 void TestCase::xmlOpenTest(){
     // Adjust your file path
     QString filePath = "D:/GoogleDrive/Programs/c++/SASWithTest/SASTest/test1.xml";

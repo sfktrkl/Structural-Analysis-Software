@@ -12,6 +12,7 @@
 #include <QString>
 #include "library.h"
 
+// empties the member node and global matrices
 void MainWindow::clearAll()
 {
     members.clear();
@@ -25,6 +26,7 @@ void MainWindow::clearAll()
     solved = 0;
 
 }
+// creates global matrices and solves given problem
 void MainWindow::solveStructure()
 {
 
@@ -77,7 +79,7 @@ void MainWindow::solveStructure()
     Deflections = gaussJordan(KGlobalMatrix,FGlobalMatrix);
     solved = true;
 }
-
+// creates XML file according to member and node classes
 void MainWindow::WriteXML(QString fileName){
     //Write XML
     MainWindow mainW;
@@ -158,7 +160,7 @@ void MainWindow::WriteXML(QString fileName){
         file.close();
     }
 }
-
+// parsing of XML file
 void MainWindow::OpenXML(QString fileName){
 
     clearAll();

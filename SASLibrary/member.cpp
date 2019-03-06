@@ -22,14 +22,10 @@ Member::Member(Node Node1,Node Node2,double dbE,double dbHeight,double dbWidth,d
     Member::numOfMembers++;
 
     this->mLocalMatrix = CreateLocalMatrix(this->memberMaterial.elasticModulus(),this->memberMaterial.inertia(),this->dbLength,this->memberMaterial.area());
-    //messageBox(this->mLocalMatrix[1][1]);
 
     this->mRotationMatrix = CreateRotationMatrix(this->dbCos,this->dbSin);
-    //messageBox(this->mRotationMatrix[0][0]);
-    //messageBox(this->mRotationMatrix[0][1]);
 
     this->mGlobalMatrix = multiplication(multiplication(transpose(mRotationMatrix),mLocalMatrix),mRotationMatrix);
-    //messageBox(this->mGlobalMatrix[0][0]);
 
     for (unsigned int i = 0; i<3;i++){
     this->vecDofNumbers.push_back(this->memberNodes[0].GetDofNumbers()[i]);
@@ -47,7 +43,7 @@ void Member::setNodes(Node node1,Node node2){
     this->memberNodes.push_back(node1);
     this->memberNodes.push_back(node2);
 }
-
+// sets member properties to material class
 void Member::SetMemberProperties(double dbE,double dbHeight,double dbWidth,double dbLength,double dbCos,double dbSin){
 
     this->dbLength = dbLength;
@@ -55,7 +51,7 @@ void Member::SetMemberProperties(double dbE,double dbHeight,double dbWidth,doubl
     this->dbSin = dbSin;
     this->memberMaterial.setMaterialProperties(dbE,dbHeight,dbWidth);
 }
-
+// gets member properties from material class
 std::vector<double> Member::GetMemberProperties(){
     std::vector<double> vecProperties;
     vecProperties.push_back(this->memberMaterial.elasticModulus());
@@ -63,7 +59,7 @@ std::vector<double> Member::GetMemberProperties(){
     vecProperties.push_back(this->memberMaterial.width());
     return vecProperties;
 }
-
+// getting member properties for creating XML file
 std::vector<double> Member::GetMemberPropertiesForXML(){
     std::vector<double> vecProperties;
     vecProperties.push_back(this->memberMaterial.elasticModulus());
@@ -74,7 +70,7 @@ std::vector<double> Member::GetMemberPropertiesForXML(){
     vecProperties.push_back(this->dbSin);
     return vecProperties;
 }
-
+// creates Fixed End Moment matrices according to given loads
 void Member::SetLoads(double dbLoadNode1,double dbLoadNode2){
     std::vector<double> Load{dbLoadNode1 + this->memberLoads.get()[0],dbLoadNode2 + this->memberLoads.get()[1]};
     this->memberLoads.setLoads(Load);

@@ -8,14 +8,14 @@ GLWidget::GLWidget(QWidget *parent) : QGLWidget (parent)
     //timer.start(4);
 }
 
-
+// initializing gl to widget
 void GLWidget::initializeGL(){
     glClearColor(GLfloat(0.2),GLfloat(0.2),GLfloat(0.2),GLfloat(1));
     glClear(GL_COLOR_BUFFER_BIT);
 }
 void GLWidget::paintGL(){
 }
-
+//  arranges size of GL according to aspect ratio
 void GLWidget::resizeGL(int w,int h){
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -25,14 +25,14 @@ void GLWidget::resizeGL(int w,int h){
     glLoadIdentity();
     swapBuffers();
 }
-
+// clearing GL
 void GLWidget::clearGL(){
     glClearColor(GLfloat(0.2),GLfloat(0.2),GLfloat(0.2),GLfloat(1));
     glClear(GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
     swapBuffers();
 }
-
+// drawes lines according to member properties
 void GLWidget::LineDraw(double xCoor1,double yCoor1,double xCoor2,double yCoor2){
     swapBuffers();
     glColor3f(1,0,0);
@@ -43,6 +43,7 @@ void GLWidget::LineDraw(double xCoor1,double yCoor1,double xCoor2,double yCoor2)
     glEnd();
     swapBuffers();
 }
+// draws points so node coordinates
 void GLWidget::nodeDraw(double xCoor1,double yCoor1){
     swapBuffers();
     glColor3f(1,1,1);
@@ -54,7 +55,7 @@ void GLWidget::nodeDraw(double xCoor1,double yCoor1){
     glEnd();
     swapBuffers();
 }
-
+// creates pin support visuals to GL
 void GLWidget::pinSupport(double xCoor1,double yCoor1){
     swapBuffers();
     glColor3f(0,1,0);
@@ -73,7 +74,7 @@ void GLWidget::pinSupport(double xCoor1,double yCoor1){
     glEnd();
     swapBuffers();
 }
-
+// creates roller support visuals to GL
 void GLWidget::rollerSupport(double xCoor1,double yCoor1,int rotation){
     if (rotation == 0){
         swapBuffers();
@@ -108,7 +109,7 @@ void GLWidget::rollerSupport(double xCoor1,double yCoor1,int rotation){
         swapBuffers();
     }
 }
-
+// creates fixed support visuals to GL
 void GLWidget::fixedSupport(double xCoor1,double yCoor1){
     swapBuffers();
     glColor3f(0,1,0);
@@ -122,7 +123,7 @@ void GLWidget::fixedSupport(double xCoor1,double yCoor1){
     swapBuffers();
 
 }
-
+// creates fixed support visuals to GL according to orientation of support
 void GLWidget::fixedRollerSupport(double xCoor1,double yCoor1,int rotation){
     if (rotation == 0){
         swapBuffers();
@@ -159,7 +160,7 @@ void GLWidget::fixedRollerSupport(double xCoor1,double yCoor1,int rotation){
 
     }
 }
-
+// creates rotation fixed support (rotation fixed only) visuals to GL
 void GLWidget::rotZeroSupport(double xCoor1,double yCoor1){
     swapBuffers();
     glColor3f(0,1,0);
@@ -172,7 +173,7 @@ void GLWidget::rotZeroSupport(double xCoor1,double yCoor1){
     glEnd();
     swapBuffers();
 }
-
+// creates simple spring with orientation of X axis
 void GLWidget::xSpring(double xCoor1,double yCoor1){
     swapBuffers();
     glColor3f(0,1,0);
@@ -208,6 +209,7 @@ void GLWidget::xSpring(double xCoor1,double yCoor1){
     swapBuffers();
 
 }
+// creates simple spring with orientation of Y axis
 void GLWidget::ySpring(double xCoor1,double yCoor1){
     swapBuffers();
     glColor3f(0,1,0);
@@ -243,6 +245,7 @@ void GLWidget::ySpring(double xCoor1,double yCoor1){
     swapBuffers();
 
 }
+// creates simple spring with orientation of Z axis
 void GLWidget::zSpring(float xCoor1, float yCoor1, float r, int num_segments){
     swapBuffers();
     double xCoor = double(xCoor1);
@@ -278,7 +281,7 @@ void GLWidget::zSpring(float xCoor1, float yCoor1, float r, int num_segments){
     glEnd();
     swapBuffers();
 }
-
+// updadets the GL axes according to inputs
 void GLWidget::sizeUpdateGL(int maxW,int maxH){
     this->maxW = maxW;
     this->maxH = maxH;
@@ -289,7 +292,7 @@ void GLWidget::sizeUpdateGL(int maxW,int maxH){
     glLoadIdentity();
     swapBuffers();
 }
-
+// draws grids
 void GLWidget::drawGrids(){
     swapBuffers();
     glColor3f(GLfloat(0.1),GLfloat(0.1),GLfloat(0.1));

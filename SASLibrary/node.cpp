@@ -91,7 +91,7 @@ void Node::SetNodeForces(double dbXForce, double dbYForce, double dbZForce){
     std::vector<double> forces{dbXForce,dbYForce,dbZForce};
     this->nodeForces.setLoads(forces);
 }
-
+// gets node properties for writing XML file
 std::vector<double> Node::GetNodePropertiesForXML(){
     std::vector<double> vecProperties;
     vecProperties.push_back(this->vecStiffness[0]);

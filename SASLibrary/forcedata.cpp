@@ -3,6 +3,7 @@
 #include "mainwindow.h"
 #include "library.h"
 
+// constructor of forceData Ui and adding items
 forceData::forceData(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::forceData)
@@ -24,7 +25,7 @@ forceData::~forceData()
 {
     delete ui;
 }
-
+// filling member matrices information to tables in Ui
 void forceData::on_memberList_itemClicked(QListWidgetItem *item)
 {
     QString sData = item->text();
@@ -47,12 +48,12 @@ void forceData::on_memberList_itemClicked(QListWidgetItem *item)
     ui->refresh->setText("Refresh");
 }
 
-
+// refreshing outputs
 void forceData::on_refresh_released()
 {
     on_memberList_itemClicked(ui->memberList->currentItem());
 }
-
+// filling node force matrix information to tables in Ui
 void forceData::on_nodeList_itemClicked(QListWidgetItem *item)
 {
     QString sData = item->text();
@@ -66,7 +67,7 @@ void forceData::on_nodeList_itemClicked(QListWidgetItem *item)
     ui->refresh_2->setText("Refresh");
 }
 
-
+// refresing outputs
 void forceData::on_refresh_2_released()
 {
     on_nodeList_itemClicked(ui->nodeList->currentItem());

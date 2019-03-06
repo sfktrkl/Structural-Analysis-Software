@@ -19,7 +19,7 @@ memberData::~memberData()
 {
     delete ui;
 }
-
+// takes member local, global and rotation matrices from member class
 void memberData::on_memberList_itemClicked(QListWidgetItem *item)
 {
     QString sData = item->text();

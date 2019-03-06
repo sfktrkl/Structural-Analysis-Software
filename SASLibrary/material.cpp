@@ -15,7 +15,7 @@ Material::Material()
     Material::numOfMaterials++;
 
 }
-
+// sets material properties
 Material::Material(double dbElasticModulus,double dbHeight,double dbWidth)
 {
     this->dbElasticModulus = dbElasticModulus;

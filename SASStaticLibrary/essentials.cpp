@@ -47,7 +47,7 @@ std::string boolVectorToString(std::vector<bool> vecData){
 
     return sData;
 }
-
+// messageBoxes for simple debug
 void messageBox(std::vector<bool> vecSData){
     std::string message = boolVectorToString(vecSData);
     QString qMessage = QString::fromStdString(message);

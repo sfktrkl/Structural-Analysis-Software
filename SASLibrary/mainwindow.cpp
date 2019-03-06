@@ -58,19 +58,12 @@ void MainWindow::on_createNode_released()
         double dbZForce = QString(ui->zForce->text()).toDouble();
 
         nodes.push_back(Node(bXFixity,bYFixity,bZFixity,dbXStiffness,dbYStiffness,dbZStiffness,dbXCoordinate,dbYCoordinate,dbXForce,dbYForce,dbZForce));
-        //messageBox(nodes[Node::numOfNodes-1].GetNodeCoordinates());
 
         ui->nodeList->addItem(QString::number(Node::numOfNodes-1));
         ui->xCoordinate->selectAll();
         ui->xCoordinate->setFocus();
 
         drawNodes(bXFixity,bYFixity,bZFixity,int(dbXStiffness),int (dbYStiffness),int(dbZStiffness),dbXCoordinate,dbYCoordinate);
-
-        ///////////////////////////
-        ui->zFixity->setChecked(0);
-        ui->xCoordinate->setText("13");
-        ui->zStiffness->setText("1000");
-        /////////////////////////
     }
     else{
         messageBox("First Create Grid to Draw!");
@@ -102,14 +95,9 @@ void MainWindow::on_createMember_released()
 
     ui->openGLWidget->LineDraw(nodes[uiNode1].GetXCoordinate(),nodes[uiNode1].GetYCoordinate(),nodes[uiNode2].GetXCoordinate(),nodes[uiNode2].GetYCoordinate());
 
-    ///////////////////////////
-    ui->unitWeight->setText("10");
-    ui->SelfWeight->setEnabled(1);
-    /////////////////////////
-
 }
 
-
+// edits area and inertia texts in Ui when height and width inputs are given
 void MainWindow::on_mWidth_textEdited()
 {
     if (ui->mHeight->text().isEmpty() != 1 && ui->mWidth->text().isEmpty() != 1){
@@ -125,7 +113,7 @@ void MainWindow::on_mHeight_textEdited()
         ui->mInertia->setText(QString::number(pow(ui->mHeight->text().toDouble(),3)*ui->mWidth->text().toDouble()/12));
     }
 }
-
+// edits length texts in Ui when node inputs are given
 void MainWindow::on_mNode1_textEdited()
 {
     if(ui->mNode1->text().isEmpty() != 1 && ui->mNode2->text().isEmpty() != 1){
@@ -145,7 +133,7 @@ void MainWindow::on_mNode2_textEdited()
         ui->mLength->setText(QString::number(dbLength));
     }
 }
-
+// takes node properties and gives output to Ui
 void MainWindow::on_nodeList_itemClicked(QListWidgetItem *item)
 {
     QString sData = item->text();
@@ -182,7 +170,7 @@ void MainWindow::on_nodeList_itemClicked(QListWidgetItem *item)
     ui->changeNode->setEnabled(1);
 
 }
-
+// sets properties of nodes
 void MainWindow::on_changeNode_released()
 {
     QString sData = ui->nodeList->currentItem()->text();
@@ -196,7 +184,7 @@ void MainWindow::on_changeNode_released()
     ui->nodeList->clearSelection();
     ui->xCoordinate->setFocus();
 }
-
+// takes member properties and gives output to Ui
 void MainWindow::on_memberList_itemClicked(QListWidgetItem *item)
 {
     QString sData = item->text();
@@ -217,7 +205,7 @@ void MainWindow::on_memberList_itemClicked(QListWidgetItem *item)
     ui->addLoad->setEnabled(1);
     ui->addLoad->setText("Add/Change \nLoads");
 }
-
+// sets properties of members
 void MainWindow::on_changeMember_released()
 {
     QString sData = ui->memberList->currentItem()->text();
@@ -246,15 +234,14 @@ void MainWindow::on_changeMember_released()
     ui->addLoad->setText("First Select \nMember");
     ui->mElastic->setFocus();
 }
-
+// activates button when text is edited
 void MainWindow::on_unitWeight_textEdited()
 {
     ui->SelfWeight->setEnabled(1);
     ui->SelfWeight->setText("Add/Change \nUnit Weight");
 }
 
-
-
+// sets unitweight of the members
 void MainWindow::on_SelfWeight_released()
 {
     double unitWeight = QString(ui->unitWeight->text()).toDouble();
@@ -274,7 +261,7 @@ void MainWindow::on_SelfWeight_released()
     ui->lNode1->setFocus();
 
 }
-
+// adding loads to members
 void MainWindow::on_addLoad_released()
 {
     double dbLoad1 = QString(ui->lNode1->text()).toDouble();
@@ -290,7 +277,7 @@ void MainWindow::on_addLoad_released()
     ui->lNode1->setFocus();
 
 }
-
+// displays memberData Ui
 void MainWindow::on_actionMembers_triggered()
 {
     memberData memberDataUi;
@@ -298,9 +285,7 @@ void MainWindow::on_actionMembers_triggered()
     memberDataUi.exec();
 
 }
-
-
-
+// solves the problem and displays structureData Ui
 void MainWindow::on_solve_released()
 {
 
@@ -322,20 +307,20 @@ void MainWindow::on_actionStructure_triggered()
     }
 
 }
-
+// displays forceData Ui
 void MainWindow::on_actionForces_triggered()
 {
     forceData forceDataUi;
     forceDataUi.setModal(true);
     forceDataUi.exec();
 }
-
+// saves file to XML
 void MainWindow::on_actionSave_triggered()
 {
     QString fileName = QFileDialog::getSaveFileName(nullptr,"Save the file",QDir::homePath());
     WriteXML(fileName);
 }
-
+// reads file from XML
 void MainWindow::on_actionOpen_triggered()
 {
 
@@ -358,7 +343,7 @@ void MainWindow::on_actionOpen_triggered()
 
 }
 
-
+// clears the memory and Ui to enter new problem
 void MainWindow::on_actionNew_triggered()
 {
     QMessageBox::StandardButton reply;
@@ -375,7 +360,7 @@ void MainWindow::on_actionNew_triggered()
             ui->createGrid->setEnabled(1);
       }
 }
-
+//
 void MainWindow::createGrid(int xGrid,int yGrid){
     ui->openGLWidget->setActivated();
     ui->openGLWidget->sizeUpdateGL(xGrid,yGrid);
@@ -390,7 +375,7 @@ void MainWindow::on_createGrid_released()
     createGrid(xGrid,yGrid);
 
 }
-
+// enables fixity lineEdits to enter springs if there is
 void MainWindow::on_xFixity_stateChanged(int arg1)
 {
     if (arg1 == 2){
@@ -424,7 +409,7 @@ void MainWindow::on_zFixity_stateChanged(int arg1)
     }
 }
 
-
+// drawing nodes according to the fixities to GL
 void MainWindow::drawNodes(bool bXFixity,bool bYFixity,bool bZFixity,int iXStiffness,int iYStiffness,int iZStiffness,double dbXCoordinate,double dbYCoordinate){
     ui->openGLWidget->nodeDraw(dbXCoordinate,dbYCoordinate);
     if (bXFixity == true && bYFixity == true && bZFixity == false){

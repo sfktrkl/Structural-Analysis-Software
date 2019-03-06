@@ -1,6 +1,6 @@
 #include "library.h"
 #include <vector>
-
+// calculates the transpose of the matrix
 std::vector<std::vector<double>> transpose(std::vector<std::vector<double>> inputMatrix){
     std::vector<std::vector<double>> transposedMatrix(inputMatrix[0].size(), std::vector<double>(inputMatrix.size()));
     for (unsigned int i = 0; i < inputMatrix[0].size(); ++i)
@@ -9,7 +9,7 @@ std::vector<std::vector<double>> transpose(std::vector<std::vector<double>> inpu
 
     return transposedMatrix;
 }
-
+// calculates the multiplication of two matrices
 std::vector<std::vector<double>> multiplication(std::vector<std::vector<double>> matrix1,std::vector<std::vector<double>> matrix2){
     std::vector<std::vector<double>> multipliedMatrix(matrix1.size(), std::vector<double>(matrix2[0].size()));
     double num;
@@ -29,7 +29,7 @@ std::vector<std::vector<double>> multiplication(std::vector<std::vector<double>>
 
 //
 //
-//
+// creates inverse of matrices for 6x6 matrices
 // matrix inverse taken from https://www.geeksforgeeks.org/adjoint-inverse-matrix/
 #define N 6
 
@@ -166,7 +166,7 @@ std::vector<std::vector<double>> matrixInverse(std::vector<std::vector<double>> 
 
 //
 //
-//
+// gauss jordan algorithm for solving the linear systems
 // gauss jordan taken from https://stackoverflow.com/questions/32427590/gauss-jordan-elimination-in-c
 std::vector<std::vector<double>> gaussJordan(std::vector<std::vector<double>> KMatrix,std::vector<std::vector<double>> FMatrix){
 
@@ -238,7 +238,10 @@ std::vector<std::vector<double>> gaussJordan(std::vector<std::vector<double>> KM
             deflection[i][0] = a[i][n];
         }
 
+        free(x);
+
     }
+    free(a);
 
     return deflection;
 }

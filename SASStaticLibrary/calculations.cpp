@@ -2,6 +2,7 @@
 #include <QtMath>
 #include <vector>
 
+// creats local matrices of the members
 std::vector<std::vector<double>> CreateLocalMatrix(double dbElasticModulus,double dbInertia,double dbLength,double dbArea){
     std::vector<std::vector<double>> LocalMatrix{
         {dbElasticModulus*dbArea/dbLength,0,0,-dbElasticModulus*dbArea/dbLength,0,0},
@@ -13,7 +14,7 @@ std::vector<std::vector<double>> CreateLocalMatrix(double dbElasticModulus,doubl
     };
     return LocalMatrix;
 }
-
+// creates rotation matrices of the members
 std::vector<std::vector<double>> CreateRotationMatrix(double dbCos,double dbSin){
     std::vector<std::vector<double>> RotationMatrix{
         {dbCos,dbSin,0,0,0,0},
