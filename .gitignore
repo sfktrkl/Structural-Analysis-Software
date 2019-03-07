@@ -30,9 +30,3 @@
 *.exe
 *.out
 *.app
-
-#modification
-.gitignore
-.user
-.gitattributes
-.pro.user
