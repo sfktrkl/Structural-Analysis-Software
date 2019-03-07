@@ -460,7 +460,7 @@ void MainWindow::drawNodes(bool bXFixity,bool bYFixity,bool bZFixity,int iXStiff
         }
     }
     else if (bXFixity == false && bYFixity == false && bZFixity == true){
-        ui->openGLWidget->fixedRollerSupport(dbXCoordinate,dbYCoordinate,0);
+        ui->openGLWidget->rotZeroSupport(dbXCoordinate,dbYCoordinate);
         if (iXStiffness != 0){
             ui->openGLWidget->xSpring(dbXCoordinate,dbYCoordinate);
         }

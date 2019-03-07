@@ -22,11 +22,18 @@ public:
     void resizeGL(int w,int h);
 
     void drawMember(double xCoor,double yCoor,double xCoor2,double yCoor2,double height,double width,double cos,double sin);
-    unsigned int checkNode(bool bXFixity,bool bYFixity,bool bZFixity,double dbXStiffness,double dbYStiffness,double dbZStiffness,double xCoor,double yCoor,double dbOffset);
+    void checkNode(bool bXFixity,bool bYFixity,bool bZFixity,double dbXStiffness,double dbYStiffness,double dbZStiffness,double xCoor,double yCoor,double dbOffset);
     void drawCuboid(double xCoor,double yCoor,double xCoor2,double yCoor2,double heightCos,double heightSin,double weight);
-    void drawPyramid();
+    void drawPyramid(double xCoor,double yCoor,int rotation);
     void drawPinSupport(double xCoor,double yCoor);
     void drawFixedSupport(double xCoor,double yCoor);
+    void drawFixedRollerSupport(double xCoor,double yCoor,int rotation);
+    void drawRollerSupport(double xCoor,double yCoor,double yCoor2,int rotation);
+    void drawRotZeroSupport(double xCoor,double yCoor);
+    void drawNode(double xCoor,double yCoor);
+    void drawXSpring(float xCoor,float yCoor, float zCoor);
+    void drawYSpring(float xCoor,float yCoor, float zCoor);
+    void drawZSpring(float xCoor,float yCoor, float zCoor);
     //void rotateGL();
     //void clearGL();
 private:

@@ -163,7 +163,7 @@ void GLWidget::fixedRollerSupport(double xCoor1,double yCoor1,int rotation){
 // creates rotation fixed support (rotation fixed only) visuals to GL
 void GLWidget::rotZeroSupport(double xCoor1,double yCoor1){
     swapBuffers();
-    glColor3f(0,1,0);
+    glColor3f(0,0,1);
     glLineWidth(1);
     glBegin(GL_POLYGON);
         glVertex2f(GLfloat(xCoor1-0.15),GLfloat(yCoor1-0.15));
@@ -176,7 +176,7 @@ void GLWidget::rotZeroSupport(double xCoor1,double yCoor1){
 // creates simple spring with orientation of X axis
 void GLWidget::xSpring(double xCoor1,double yCoor1){
     swapBuffers();
-    glColor3f(0,1,0);
+    glColor3f(1.0f, 0.5f, 0.0f);    //Orange
     glLineWidth(1);
     glBegin(GL_LINES);
         glVertex2f(GLfloat(xCoor1),GLfloat(yCoor1));
@@ -202,6 +202,8 @@ void GLWidget::xSpring(double xCoor1,double yCoor1){
         glVertex2f(GLfloat(xCoor1-0.5),GLfloat(yCoor1));
         glVertex2f(GLfloat(xCoor1-0.6),GLfloat(yCoor1));
     glEnd();
+
+    glColor3f(0.0f, 1.0f, 0.0f);     // Green
     glBegin(GL_LINES);
         glVertex2f(GLfloat(xCoor1-0.6),GLfloat(yCoor1-0.2));
         glVertex2f(GLfloat(xCoor1-0.6),GLfloat(yCoor1+0.2));
@@ -212,7 +214,7 @@ void GLWidget::xSpring(double xCoor1,double yCoor1){
 // creates simple spring with orientation of Y axis
 void GLWidget::ySpring(double xCoor1,double yCoor1){
     swapBuffers();
-    glColor3f(0,1,0);
+    glColor3f(1.0f, 0.5f, 0.0f);    //Orange
     glLineWidth(1);
     glBegin(GL_LINES);
         glVertex2f(GLfloat(xCoor1),GLfloat(yCoor1));
@@ -238,6 +240,8 @@ void GLWidget::ySpring(double xCoor1,double yCoor1){
         glVertex2f(GLfloat(xCoor1),GLfloat(yCoor1-0.5));
         glVertex2f(GLfloat(xCoor1),GLfloat(yCoor1-0.6));
     glEnd();
+
+    glColor3f(0.0f, 1.0f, 0.0f);     // Green
     glBegin(GL_LINES);
         glVertex2f(GLfloat(xCoor1-0.15),GLfloat(yCoor1-0.6));
         glVertex2f(GLfloat(xCoor1+0.15),GLfloat(yCoor1-0.6));
@@ -250,7 +254,7 @@ void GLWidget::zSpring(float xCoor1, float yCoor1, float r, int num_segments){
     swapBuffers();
     double xCoor = double(xCoor1);
     double yCoor = double(yCoor1);
-    glColor3f(0,1,0);
+    glColor3f(1.0f, 0.5f, 0.0f);    //Orange
     glLineWidth(1);
     glBegin(GL_LINE_LOOP);
     for(int ii = 0; ii < num_segments; ii++)
@@ -275,6 +279,8 @@ void GLWidget::zSpring(float xCoor1, float yCoor1, float r, int num_segments){
         glVertex2f(GLfloat(xCoor),GLfloat(yCoor));
         glVertex2f(GLfloat(xCoor+0.4),GLfloat(yCoor));
     glEnd();
+
+    glColor3f(0.0f, 1.0f, 0.0f);     // Green
     glBegin(GL_LINES);
         glVertex2f(GLfloat(xCoor+0.4),GLfloat(yCoor-0.4));
         glVertex2f(GLfloat(xCoor+0.4),GLfloat(yCoor+0.4));
