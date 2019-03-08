@@ -28,5 +28,6 @@ std::vector<std::vector<double>> gaussJordan(std::vector<std::vector<double>> KM
 // calculations.cpp
 std::vector<std::vector<double>> CreateLocalMatrix(double dbElasticModulus,double dbInertia,double dbLength,double dbArea);
 std::vector<std::vector<double>> CreateRotationMatrix(double dbCos,double dbSin);
+double avoidPrecision(double given);
 
 #endif // LIBRARY_H

@@ -111,7 +111,7 @@ void TestCase::memberTest(){
     QCOMPARE(int(MainWindow::members[0].GetRotationMatrix()[3][3]),int(1));
     QCOMPARE(int(MainWindow::members[0].GetGlobalMatrix()[5][5]),int(6153));
 }
-// solves a simple example
+//  checks Fixed End Moments of a simple example
 void TestCase::firstExampleTest(){
     MainWindow::clearAll();
     MainWindow::nodes.push_back(Node(true,true,false,0,0,0,0,0,0,0,0));

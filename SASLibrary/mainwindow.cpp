@@ -5,6 +5,8 @@
 #include "memberdata.h"
 #include "structuredata.h"
 #include "forcedata.h"
+#include "memberinternalforces.h"
+#include "supportreactions.h"
 #include "library.h"
 
 #include <QtCore>
@@ -69,6 +71,12 @@ void MainWindow::on_createNode_released()
     else{
         messageBox("First Create Grid to Draw!");
     }
+
+    //
+    std::vector<std::vector<double>> a{{0,1,0,0,0,0},{-1,0,0,0,0,0},{0,0,1,0,0,0},{0,0,0,0,1,0},{0,0,0,-1,0,0},{0,0,0,0,0,1}};
+    matrixInverse(a);
+    //float a[6][6]{{0.948,0.316,0,0,0,0},{-0.316,0.948,0,0,0,0},{0,0,1,0,0,0},{0,0,0,0.948,-0.316,0},{0,0,0,-0.316,0.948,0},{0,0,0,0,0,1}};
+    //
 
 }
 
@@ -167,6 +175,10 @@ void MainWindow::on_nodeList_itemClicked(QListWidgetItem *item)
     ui->xForce->setText(QString::number(nodes[uiData].nodeForces.get()[0]));
     ui->yForce->setText(QString::number(nodes[uiData].nodeForces.get()[1]));
     ui->zForce->setText(QString::number(nodes[uiData].nodeForces.get()[2]));
+
+    ui->xStiffness->setText(QString::number(nodes[uiData].GetStiffness()[0]));
+    ui->yStiffness->setText(QString::number(nodes[uiData].GetStiffness()[1]));
+    ui->zStiffness->setText(QString::number(nodes[uiData].GetStiffness()[2]));
 
     ui->changeNode->setEnabled(1);
 
@@ -314,6 +326,32 @@ void MainWindow::on_actionForces_triggered()
     forceDataUi.setModal(true);
     forceDataUi.exec();
 }
+
+void MainWindow::on_actionInternal_Forces_triggered()
+{
+    if (solved == true){
+        MemberInternalForces mInternal;
+        mInternal.setModal(true);
+        mInternal.exec();
+    }
+    else {
+        messageBox("Solve First");
+    }
+
+}
+
+void MainWindow::on_actionSupports_triggered()
+{
+    if (solved == true){
+        supportReactions reactions;
+        reactions.setModal(true);
+        reactions.exec();
+    }
+    else {
+        messageBox("Solve First");
+    }
+}
+
 
 void MainWindow::on_action3D_View_triggered()
 {
@@ -480,5 +518,6 @@ void MainWindow::drawNodes(bool bXFixity,bool bYFixity,bool bZFixity,int iXStiff
         }
     }
 }
+
 
 

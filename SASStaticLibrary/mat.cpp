@@ -1,5 +1,7 @@
 #include "library.h"
 #include <vector>
+#include <QDebug>
+#include "math.h"
 // calculates the transpose of the matrix
 std::vector<std::vector<double>> transpose(std::vector<std::vector<double>> inputMatrix){
     std::vector<std::vector<double>> transposedMatrix(inputMatrix[0].size(), std::vector<double>(inputMatrix.size()));
@@ -30,139 +32,117 @@ std::vector<std::vector<double>> multiplication(std::vector<std::vector<double>>
 //
 //
 // creates inverse of matrices for 6x6 matrices
-// matrix inverse taken from https://www.geeksforgeeks.org/adjoint-inverse-matrix/
-#define N 6
-
-void getCofactor(double A[N][N], double temp[N][N], int p, int q, int n){
-    int i = 0, j = 0;
-
-    // Looping for each element of the matrix
-    for (int row = 0; row < n; row++)
-    {
-        for (int col = 0; col < n; col++)
-        {
-            //  Copying into temporary matrix only those element
-            //  which are not in given row and column
-            if (row != p && col != q)
-            {
-                temp[i][j++] = A[row][col];
-
-                // Row is filled, so increase row index and
-                // reset col index
-                if (j == n - 1)
-                {
-                    j = 0;
-                    i++;
-                }
+//---------------------------------------------------
+// https://github.com/md-akhi/Inverse-matrix/blob/master/Inverse-matrix.cpp
+//---------------------------------------------------
+//	calculate minor of matrix OR build new matrix : k-had = minor
+void minor(double b[6][6],double a[6][6],int i,int n){
+    int j,l,h=0,k=0;
+    for(l=1;l<n;l++)
+        for( j=0;j<n;j++){
+            if(j == i)
+                continue;
+            b[h][k] = a[l][j];
+            k++;
+            if(k == (n-1)){
+                h++;
+                k=0;
             }
         }
-    }
-}
+}// end function
 
-/* Recursive function for finding determinant of matrix.
-   n is current dimension of A[][]. */
-double determinant(double A[N][N], int n){
-    int D = 0; // Initialize result
-
-    //  Base case : if matrix contains single element
+//---------------------------------------------------
+//	calculate determinte of matrix
+double det(double a[6][6],int n){
+    int i;
+    double b[6][6],sum =0;
     if (n == 1)
-        return A[0][0];
-
-    double temp[N][N]; // To store cofactors
-
-    int sign = 1;  // To store sign multiplier
-
-     // Iterate for each element of first row
-    for (int f = 0; f < n; f++)
-    {
-        // Getting Cofactor of A[0][f]
-        getCofactor(A, temp, 0, f, n);
-        D += sign * A[0][f] * determinant(temp, n - 1);
-
-        // terms are to be added with alternate sign
-        sign = -sign;
-    }
-
-    return D;
-}
-
-// Function to get adjoint of A[N][N] in adj[N][N].
-void adjoint(double A[N][N],double adj[N][N]){
-    if (N == 1)
-    {
-        adj[0][0] = 1;
-        return;
-    }
-
-    // temp is used to store cofactors of A[][]
-    int sign = 1;
-    double temp[N][N];
-
-    for (int i=0; i<N; i++)
-    {
-        for (int j=0; j<N; j++)
-        {
-            // Get cofactor of A[i][j]
-            getCofactor(A, temp, i, j, N);
-
-            // sign of adj[j][i] positive if sum of row
-            // and column indexes is even.
-            sign = ((i+j)%2==0)? 1: -1;
-
-            // Interchanging rows and columns to get the
-            // transpose of the cofactor matrix
-            adj[j][i] = (sign)*(determinant(temp, N-1));
+        return a[0][0];
+    else if(n == 2)
+        return (a[0][0]*a[1][1]-a[0][1]*a[1][0]);
+    else
+        for(i=0;i<n;i++){
+            minor(b,a,i,n);	// read function
+            sum = double (sum+a[0][i]*pow(-1,i)*det(b,(n-1)));	// read function	// sum = determinte matrix
         }
-    }
-}
+return sum;
+}// end function
 
-// Function to calculate and store inverse, returns false if
-// matrix is singular
-bool inverse(double A[N][N], double inverse[N][N]){
-    // Find determinant of A[][]
-    double det = determinant(A, N);
-    if (int(det) == 0)
-    {
-        return false;
-    }
+//---------------------------------------------------
+//	calculate transpose of matrix
+void transpose(double c[6][6],double d[6][6],int n,double det){
+    int i,j;
+    double b[100][100];
+    for (i=0;i<n;i++)
+        for (j=0;j<n;j++)
+            b[i][j] = c[j][i];
+    for (i=0;i<n;i++)
+        for (j=0;j<n;j++)
+            d[i][j] = b[i][j]/det;	// array d[][] = inverse matrix
+}// end function
 
-    // Find adjoint
-    double adj[N][N];
-    adjoint(A, adj);
+//---------------------------------------------------
+//	calculate cofactor of matrix
+void cofactor(double a[6][6],double d[6][6],int n,double determinte){
+    double b[6][6],c[6][6];
+    int l,h,m,k,i,j;
+    for (h=0;h<n;h++)
+        for (l=0;l<n;l++){
+            m=0;
+            k=0;
+            for (i=0;i<n;i++)
+                for (j=0;j<n;j++)
+                    if (i != h && j != l){
+                        b[m][k]=a[i][j];
+                        if (k<(n-2))
+                            k++;
+                        else{
+                            k=0;
+                            m++;
+                        }
+                    }
+            c[h][l] = double(pow(-1,(h+l)) *double(det(b,(n-1))) );	// c = cofactor Matrix
+        }
+    transpose(c,d,n,determinte);	// read function
+}// end function
 
-    // Find Inverse using formula "inverse(A) = adj(A)/det(A)"
-    for (int i=0; i<N; i++)
-        for (int j=0; j<N; j++)
-            inverse[i][j] = adj[i][j]/double(det);
+//---------------------------------------------------
+//	calculate inverse of matrix
+void inverse(double a[6][6],double d[6][6],int n,double det){
+    if(det == 0)
+        messageBox("\nInverse of Entered Matrix is not possible\n");
+    else if(n == 1)
+        d[0][0] = 1;
+    else
+        cofactor(a,d,n,det); // read function
+}// end function
 
-    return true;
-}
-
-// Driver program
+//---------------------------------------------------
+//main fuction exe
 std::vector<std::vector<double>> matrixInverse(std::vector<std::vector<double>> inputMatrix){
-    double A[N][N];
+    int n=6;
+    double a[6][6],d[6][6],deter;
+
     for (unsigned int i = 0;i<6;i++){
         for (unsigned int j = 0;j<6;j++){
-            A[i][j] = inputMatrix[i][j];
+            a[i][j] = inputMatrix[i][j];
         }
 
     }
 
-    double adj[N][N];  // To store adjoint of A[][]
-    adjoint(A, adj);
-    double inv[N][N];   // To store inverse of A[][]
-    inverse(A, inv);;
+    deter = double (det(a,n));	// read function
+    inverse(a,d,n,deter);	// read function
 
     std::vector<std::vector<double>> inversedmatrix(6, std::vector<double>(6));
     for (unsigned int i = 0;i<6;i++){
         for (unsigned int j = 0;j<6;j++){
-            inversedmatrix[i][j] = inv[i][j];
+            inversedmatrix[i][j] = d[i][j];
         }
 
     }
 
     return inversedmatrix;
-}
+}// end main
 
 //
 //

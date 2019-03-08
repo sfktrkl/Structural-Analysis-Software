@@ -29,6 +29,8 @@ public:
     std::vector<bool> GetNodeFixitiesForXML();
     unsigned int getNodeId(){return nodeId;}
 
+    std::vector<double> supportReactions;
+
     static unsigned int numOfNodes;
     static unsigned int numOfDofs;
 

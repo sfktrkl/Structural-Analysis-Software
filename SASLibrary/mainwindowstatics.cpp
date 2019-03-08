@@ -29,7 +29,7 @@ void MainWindow::clearAll()
 // creates global matrices and solves given problem
 void MainWindow::solveStructure()
 {
-
+    // create structure global stiffness matrix
     std::vector<std::vector<double>> tempKMatrix(Node::numOfDofs-1, std::vector<double>(Node::numOfDofs-1));
 
     for (unsigned int i = 0;i<Member::numOfMembers;i++){
@@ -54,6 +54,7 @@ void MainWindow::solveStructure()
 
     KGlobalMatrix = tempKMatrix;
 
+    // create structure force matrix
     std::vector<std::vector<double>> tempForceMatrix(Node::numOfDofs-1, std::vector<double>(1));
 
     for (unsigned int i = 0;i<Member::numOfMembers;i++){
@@ -78,7 +79,105 @@ void MainWindow::solveStructure()
 
     Deflections = gaussJordan(KGlobalMatrix,FGlobalMatrix);
     solved = true;
+
+    // create member internal forces matrices
+    for (unsigned int i = 0;i<Member::numOfMembers;i++){
+        members[i].memberLocalForces = calculateMemberLocalForces(i);
+        members[i].memberGlobalForces = multiplication(matrixInverse(members[i].GetRotationMatrix()),members[i].memberLocalForces);
+
+        // arranges signs according to sign convention
+        std::vector<std::vector<double>> tempInternalForces(6,std::vector<double>(1));
+        for (unsigned int j = 0;j<6;j++){
+            if (j<3){
+                tempInternalForces[j][0] = -1*members[i].memberLocalForces[j][0];
+            }
+            else{
+                tempInternalForces[j][0] = members[i].memberLocalForces[j][0];
+            }
+        }
+
+        members[i].memberInternalForces = tempInternalForces;
+    }
+
+    // creates support reactions matrices and adds support reactions from nodes
+    for (unsigned int  i= 0;i<Node::numOfNodes;i++){
+        nodes[i].supportReactions = {0,0,0};
+        for (unsigned int j = 0 ; j<3;j++){
+                nodes[i].supportReactions[j] = nodes[i].supportReactions[j] - nodes[i].nodeForces.get()[j];
+
+        }
+    }
+    // adds from member forces
+    for (unsigned int i = 0;i<Member::numOfMembers;i++){
+        for (unsigned int j = 0;j<6;j++){
+                if (j<3){
+                    nodes[members[i].memberNodes[0].getNodeId()].supportReactions[j] = members[i].memberGlobalForces[j][0] + nodes[members[i].memberNodes[0].getNodeId()].supportReactions[j];
+                }
+                else{
+                    nodes[members[i].memberNodes[1].getNodeId()].supportReactions[j-3] = members[i].memberGlobalForces[j][0] + nodes[members[i].memberNodes[1].getNodeId()].supportReactions[j-3];
+                }
+        }
+    }
+
+
 }
+
+std::vector<std::vector<double> > MainWindow::calculateMemberLocalForces(unsigned int memberId)
+{
+    std::vector<std::vector<double>> MemberLocalForces(6,std::vector<double>(1));
+
+    std::vector<std::vector<double>> tempDeflections(6,std::vector<double>(1));
+
+    for (unsigned int i = 0;i<Member::numOfMembers;i++){
+        for (unsigned int j = 0;j<6;j++){
+            if (members[memberId].GetDofNumbers()[j] != 0){
+                tempDeflections[j][0] = Deflections[members[memberId].GetDofNumbers()[j]-1][0];
+            }
+            else if (members[memberId].GetDofNumbers()[j] == 0){
+                tempDeflections[j][0] = 0;
+            }
+        }
+        tempDeflections = multiplication(members[memberId].GetRotationMatrix(),tempDeflections);
+        MemberLocalForces = multiplication(members[memberId].GetLocalMatrix(),tempDeflections);
+    }
+
+    for (unsigned int i = 0;i<6;i++){
+            MemberLocalForces[i][0] = members[memberId].GetLocalFEMMatrix()[i][0] + MemberLocalForces[i][0];
+    }
+
+    return MemberLocalForces;
+}
+
+
+std::vector<std::vector<double> > MainWindow::calculateMemberInternalForces(unsigned int memberId)
+{
+    std::vector<std::vector<double>> MemberLocalForces(6,std::vector<double>(1));
+
+    std::vector<std::vector<double>> tempDeflections(6,std::vector<double>(1));
+
+    for (unsigned int i = 0;i<Member::numOfMembers;i++){
+        for (unsigned int j = 0;j<6;j++){
+            if (members[memberId].GetDofNumbers()[j] != 0){
+                tempDeflections[j][0] = Deflections[members[memberId].GetDofNumbers()[j]][0];
+            }
+            else{
+                tempDeflections[j][0] = 0;
+            }
+        }
+        tempDeflections = multiplication(members[memberId].GetRotationMatrix(),tempDeflections);
+        MemberLocalForces = multiplication(members[memberId].GetLocalMatrix(),tempDeflections);
+    }
+
+    for (unsigned int i = 0;i<6;i++){
+            MemberLocalForces[i][0] = members[memberId].GetLocalFEMMatrix()[i][0] + MemberLocalForces[i][0];
+    }
+
+    return MemberLocalForces;
+}
+
+
+
+
 // creates XML file according to member and node classes
 void MainWindow::WriteXML(QString fileName){
     //Write XML

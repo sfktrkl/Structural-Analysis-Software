@@ -1100,7 +1100,7 @@ Member</string>
      <normaloff>:/new/prefix1/supports</normaloff>:/new/prefix1/supports</iconset>
    </property>
    <property name="text">
-    <string>Supports</string>
+    <string>Support Reactions</string>
    </property>
   </action>
   <action name="actionInternal_Forces">
@@ -1109,7 +1109,7 @@ Member</string>
      <normaloff>:/new/prefix1/internal</normaloff>:/new/prefix1/internal</iconset>
    </property>
    <property name="text">
-    <string>Internal Forces</string>
+    <string>Member Internal Forces</string>
    </property>
   </action>
   <action name="action3D_View">

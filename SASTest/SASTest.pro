@@ -27,4 +27,5 @@ DEPENDPATH += $$PWD/../SASLibrary
 
 DISTFILES += \
     test1.xml \
-    test2.xml
+    test2.xml \
+    openGLtest.xml

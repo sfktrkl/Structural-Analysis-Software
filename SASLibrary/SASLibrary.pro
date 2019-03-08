@@ -38,7 +38,9 @@ SOURCES += \
     material.cpp \
     loads.cpp \
     glwidget3d.cpp \
-    opengl3d.cpp
+    opengl3d.cpp \
+    memberinternalforces.cpp \
+    supportreactions.cpp
 
 HEADERS += \
         saslibrary.h \
@@ -53,14 +55,18 @@ HEADERS += \
     material.h \
     loads.h \
     glwidget3d.h \
-    opengl3d.h
+    opengl3d.h \
+    memberinternalforces.h \
+    supportreactions.h
 
 FORMS += \
         mainwindow.ui \
     memberdata.ui \
     structuredata.ui \
     forcedata.ui \
-    opengl3d.ui
+    opengl3d.ui \
+    memberinternalforces.ui \
+    supportreactions.ui
 unix {
     target.path = /usr/lib
     INSTALLS += target

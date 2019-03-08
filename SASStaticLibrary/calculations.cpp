@@ -26,3 +26,12 @@ std::vector<std::vector<double>> CreateRotationMatrix(double dbCos,double dbSin)
     };
     return RotationMatrix;
 }
+
+// avoids results between -10^-10 < result < 10^-10, since they are ignorable
+double avoidPrecision(double given){
+    if (given < 0.00000000001 && given > -0.00000000001){
+        given = 0;
+    }
+
+    return given;
+}

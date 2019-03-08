@@ -5,6 +5,7 @@
 #include "node.h"
 #include "mainwindow.h"
 #include "saslibrary_global.h"
+#include "library.h"
 namespace Ui {
 class structureData;
 }

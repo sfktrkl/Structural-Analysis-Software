@@ -33,14 +33,14 @@ void forceData::on_memberList_itemClicked(QListWidgetItem *item)
 
     for (unsigned int i = 0; i<6;i++){
         for (unsigned int j = 0; j<6;j++){
-            ui->rotationMatrix->setItem(int(i),int(j),new QTableWidgetItem(QString::number(MainWindow::members[uiData].GetRotationMatrix()[i][j])));
+            ui->rotationMatrix->setItem(int(i),int(j),new QTableWidgetItem(QString::number(avoidPrecision(MainWindow::members[uiData].GetRotationMatrix()[i][j]))));
         }
     }
 
     for (unsigned int i = 0; i<6;i++){
         for (unsigned int j = 0; j<1;j++){
-            ui->localMatrix->setItem(int(i),int(j),new QTableWidgetItem(QString::number(MainWindow::members[uiData].GetLocalFEMMatrix()[i][j])));
-            ui->globalMatrix->setItem(int(i),int(j),new QTableWidgetItem(QString::number(MainWindow::members[uiData].GetGlobalFEMMatrix()[i][j])));
+            ui->localMatrix->setItem(int(i),int(j),new QTableWidgetItem(QString::number(avoidPrecision(MainWindow::members[uiData].GetLocalFEMMatrix()[i][j]))));
+            ui->globalMatrix->setItem(int(i),int(j),new QTableWidgetItem(QString::number(avoidPrecision(MainWindow::members[uiData].GetGlobalFEMMatrix()[i][j]))));
         }
     }
 
@@ -60,7 +60,7 @@ void forceData::on_nodeList_itemClicked(QListWidgetItem *item)
     unsigned int uiData = sData.toUInt();
 
     for (unsigned int i = 0; i<3;i++){
-            ui->nodeForces->setItem(int(i),int(0),new QTableWidgetItem(QString::number(MainWindow::nodes[uiData].nodeForces.get()[i])));
+            ui->nodeForces->setItem(int(i),int(0),new QTableWidgetItem(QString::number(avoidPrecision(MainWindow::nodes[uiData].nodeForces.get()[i]))));
     }
 
     ui->refresh_2->setEnabled(1);

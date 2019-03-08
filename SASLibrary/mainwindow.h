@@ -28,6 +28,8 @@ public:
     static std::vector<std::vector<double>> FGlobalMatrix;
     static std::vector<std::vector<double>> Deflections;
     static void solveStructure();
+    static std::vector<std::vector<double>> calculateMemberLocalForces(unsigned int memberId);
+    static std::vector<std::vector<double>> calculateMemberInternalForces(unsigned int memberId);
     static void WriteXML(QString fileName);
     static void OpenXML(QString fileName);
     void drawNodes(bool bXFixity,bool bYFixity,bool bZFixity,int iXStiffness,int iYStiffness,int iZStiffness,double dbXCoordinate,double dbYCoordinate);
@@ -84,6 +86,10 @@ private slots:
     void on_zFixity_stateChanged(int arg1);
 
     void on_action3D_View_triggered();
+
+    void on_actionInternal_Forces_triggered();
+
+    void on_actionSupports_triggered();
 
 private:
     Ui::MainWindow *ui;

@@ -27,9 +27,9 @@ void memberData::on_memberList_itemClicked(QListWidgetItem *item)
 
     for (unsigned int i = 0; i<6;i++){
         for (unsigned int j = 0; j<6;j++){
-            ui->localMatrix->setItem(int(i),int(j),new QTableWidgetItem(QString::number(MainWindow::members[uiData].GetLocalMatrix()[i][j])));
-            ui->globalMatrix->setItem(int(i),int(j),new QTableWidgetItem(QString::number(MainWindow::members[uiData].GetGlobalMatrix()[i][j])));
-            ui->rotationMatrix->setItem(int(i),int(j),new QTableWidgetItem(QString::number(MainWindow::members[uiData].GetRotationMatrix()[i][j])));
+            ui->localMatrix->setItem(int(i),int(j),new QTableWidgetItem(QString::number(avoidPrecision(MainWindow::members[uiData].GetLocalMatrix()[i][j]))));
+            ui->globalMatrix->setItem(int(i),int(j),new QTableWidgetItem(QString::number(avoidPrecision(MainWindow::members[uiData].GetGlobalMatrix()[i][j]))));
+            ui->rotationMatrix->setItem(int(i),int(j),new QTableWidgetItem(QString::number(avoidPrecision(MainWindow::members[uiData].GetRotationMatrix()[i][j]))));
         }
     }
 
