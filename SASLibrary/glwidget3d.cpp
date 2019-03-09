@@ -426,16 +426,3 @@ void GLWidget3D::drawZSpring(float xCoor, float yCoor,float zCoor)
 
 }
 
-
-/*
-void GLWidget3D::rotateGL()
-{
-
-}
-
-void GLWidget3D::clearGL(){
-
-}
-*/
-
-

@@ -13,7 +13,6 @@ class SASLIBRARYSHARED_EXPORT GLWidget3D : public QGLWidget
 {
     Q_OBJECT
     MAKE_TESTABLE(GLWidget3D);
-
 public:
     explicit GLWidget3D(QWidget *parent = nullptr);
 
@@ -34,8 +33,7 @@ public:
     void drawXSpring(float xCoor,float yCoor, float zCoor);
     void drawYSpring(float xCoor,float yCoor, float zCoor);
     void drawZSpring(float xCoor,float yCoor, float zCoor);
-    //void rotateGL();
-    //void clearGL();
+
 private:
 
     QTimer timer;

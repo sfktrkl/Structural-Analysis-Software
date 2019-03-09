@@ -17,6 +17,7 @@ public:
     void SetNodeCoordinates(double dbXCoordinate, double dbYCoordinate);
     void SetNodeFixity(bool bXFixity, bool bYFixity, bool bZFixity);
     void SetNodeForces(double dbXForce, double dbYForce, double dbZForce);
+    void SetNodeStiffness(double dbXStiffness,double dbYStiffness,double dbZStiffness);
     void setOffsetOpenGL(double dbOffset){this->dbOffset = dbOffset;}
     std::vector<bool> GetNodeFixity(){return this->bFixity;}
     std::vector<double> GetNodeCoordinates(){return this->dbCoordinates;}

@@ -331,8 +331,6 @@ void MainWindow::OpenXML(QString fileName){
             double dbZForce = QString(nodeelement.attribute("Z_Force")).toDouble();
             MainWindow::nodes.push_back(Node(bXFixity,bYFixity,bZFixity,dbXStiffness,dbYStiffness,dbZStiffness,dbXCoordinate,dbYCoordinate,dbXForce,dbYForce,dbZForce));
 
-            mainW.drawNodes(bXFixity,bYFixity,bZFixity,int(dbXStiffness),int (dbYStiffness),int(dbZStiffness),dbXCoordinate,dbYCoordinate);
-
         }
     }
 
@@ -366,8 +364,6 @@ void MainWindow::OpenXML(QString fileName){
             MainWindow::members.push_back(Member(nodes[uiNode1],nodes[uiNode2],dbE,dbHeight,dbWidth,dbLength,dbCos,dbSin));
             MainWindow::members[memberId].memberMaterial.setUnitWeight(unitWeight);
             MainWindow::members[memberId].SetLoads(dbLoad1,dbLoad2);
-
-            mainW.ui->openGLWidget->LineDraw(nodes[uiNode1].GetXCoordinate(),nodes[uiNode1].GetYCoordinate(),nodes[uiNode2].GetXCoordinate(),nodes[uiNode2].GetYCoordinate());
 
         }
     }

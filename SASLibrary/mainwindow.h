@@ -32,7 +32,6 @@ public:
     static std::vector<std::vector<double>> calculateMemberInternalForces(unsigned int memberId);
     static void WriteXML(QString fileName);
     static void OpenXML(QString fileName);
-    void drawNodes(bool bXFixity,bool bYFixity,bool bZFixity,int iXStiffness,int iYStiffness,int iZStiffness,double dbXCoordinate,double dbYCoordinate);
     static void clearAll();
     void createGrid(int xGrid,int yGrid);
 

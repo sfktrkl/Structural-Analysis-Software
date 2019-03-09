@@ -65,19 +65,10 @@ void MainWindow::on_createNode_released()
         ui->nodeList->addItem(QString::number(Node::numOfNodes-1));
         ui->xCoordinate->selectAll();
         ui->xCoordinate->setFocus();
-
-        drawNodes(bXFixity,bYFixity,bZFixity,int(dbXStiffness),int (dbYStiffness),int(dbZStiffness),dbXCoordinate,dbYCoordinate);
     }
     else{
         messageBox("First Create Grid to Draw!");
     }
-
-    //
-    std::vector<std::vector<double>> a{{0,1,0,0,0,0},{-1,0,0,0,0,0},{0,0,1,0,0,0},{0,0,0,0,1,0},{0,0,0,-1,0,0},{0,0,0,0,0,1}};
-    matrixInverse(a);
-    //float a[6][6]{{0.948,0.316,0,0,0,0},{-0.316,0.948,0,0,0,0},{0,0,1,0,0,0},{0,0,0,0.948,-0.316,0},{0,0,0,-0.316,0.948,0},{0,0,0,0,0,1}};
-    //
-
 }
 
 void MainWindow::on_createMember_released()
@@ -101,8 +92,6 @@ void MainWindow::on_createMember_released()
     ui->memberList->addItem(QString::number(Member::numOfMembers-1));
     ui->mNode1->selectAll();
     ui->mNode1->setFocus();
-
-    ui->openGLWidget->LineDraw(nodes[uiNode1].GetXCoordinate(),nodes[uiNode1].GetYCoordinate(),nodes[uiNode2].GetXCoordinate(),nodes[uiNode2].GetYCoordinate());
 
 }
 
@@ -148,8 +137,8 @@ void MainWindow::on_nodeList_itemClicked(QListWidgetItem *item)
     QString sData = item->text();
     unsigned int uiData = sData.toUInt();
 
-    ui->xCoordinate->setText(QString::number(nodes[uiData].GetXCoordinate()));
-    ui->yCoordinate->setText(QString::number(nodes[uiData].GetYCoordinate()));
+    ui->xCoordinate->setText(QString::number(avoidPrecision(nodes[uiData].GetXCoordinate())));
+    ui->yCoordinate->setText(QString::number(avoidPrecision(nodes[uiData].GetYCoordinate())));
 
     if (nodes[uiData].GetNodeFixity()[0] == true){
         ui->xFixity->setChecked(1);
@@ -172,13 +161,13 @@ void MainWindow::on_nodeList_itemClicked(QListWidgetItem *item)
         ui->zFixity->setChecked(0);
     }
 
-    ui->xForce->setText(QString::number(nodes[uiData].nodeForces.get()[0]));
-    ui->yForce->setText(QString::number(nodes[uiData].nodeForces.get()[1]));
-    ui->zForce->setText(QString::number(nodes[uiData].nodeForces.get()[2]));
+    ui->xForce->setText(QString::number(avoidPrecision(nodes[uiData].nodeForces.get()[0])));
+    ui->yForce->setText(QString::number(avoidPrecision(nodes[uiData].nodeForces.get()[1])));
+    ui->zForce->setText(QString::number(avoidPrecision(nodes[uiData].nodeForces.get()[2])));
 
-    ui->xStiffness->setText(QString::number(nodes[uiData].GetStiffness()[0]));
-    ui->yStiffness->setText(QString::number(nodes[uiData].GetStiffness()[1]));
-    ui->zStiffness->setText(QString::number(nodes[uiData].GetStiffness()[2]));
+    ui->xStiffness->setText(QString::number(avoidPrecision(nodes[uiData].GetStiffness()[0])));
+    ui->yStiffness->setText(QString::number(avoidPrecision(nodes[uiData].GetStiffness()[1])));
+    ui->zStiffness->setText(QString::number(avoidPrecision(nodes[uiData].GetStiffness()[2])));
 
     ui->changeNode->setEnabled(1);
 
@@ -192,6 +181,7 @@ void MainWindow::on_changeNode_released()
     nodes[uiData].SetNodeCoordinates(QString(ui->xCoordinate->text()).toDouble(),QString(ui->yCoordinate->text()).toDouble());
     nodes[uiData].SetNodeForces(QString(ui->xForce->text()).toDouble(),QString(ui->yForce->text()).toDouble(),QString(ui->zForce->text()).toDouble());
     nodes[uiData].SetNodeFixity(ui->xFixity->isChecked(),ui->yFixity->isChecked(),ui->zFixity->isChecked());
+    nodes[uiData].SetNodeStiffness(QString(ui->xStiffness->text()).toDouble(),QString(ui->yStiffness->text()).toDouble(),QString(ui->zStiffness->text()).toDouble());
 
     ui->changeNode->setEnabled(0);
     ui->nodeList->clearSelection();
@@ -207,13 +197,13 @@ void MainWindow::on_memberList_itemClicked(QListWidgetItem *item)
     ui->mHeight->setText(QString::number(members[uiData].GetMemberProperties()[1]));
     ui->mWidth->setText(QString::number(members[uiData].GetMemberProperties()[2]));
 
-    ui->mNode1->setText(QString::number(members[uiData].memberNodes[0].getNodeId()));
-    ui->mNode2->setText(QString::number(members[uiData].memberNodes[1].getNodeId()));
+    ui->mNode1->setText(QString::number(avoidPrecision(members[uiData].memberNodes[0].getNodeId())));
+    ui->mNode2->setText(QString::number(avoidPrecision(members[uiData].memberNodes[1].getNodeId())));
 
-    ui->lNode1->setText(QString::number(members[uiData].memberLoads.get()[0]+members[uiData].memberMaterial.unitWeight()*members[uiData].memberMaterial.area()*members[uiData].GetCos()));
-    ui->lNode2->setText(QString::number(members[uiData].memberLoads.get()[0]+members[uiData].memberMaterial.unitWeight()*members[uiData].memberMaterial.area()*members[uiData].GetCos()));
+    ui->lNode1->setText(QString::number(avoidPrecision(members[uiData].memberLoads.get()[0]+members[uiData].memberMaterial.unitWeight()*members[uiData].memberMaterial.area()*members[uiData].GetCos())));
+    ui->lNode2->setText(QString::number(avoidPrecision(members[uiData].memberLoads.get()[0]+members[uiData].memberMaterial.unitWeight()*members[uiData].memberMaterial.area()*members[uiData].GetCos())));
 
-    ui->unitWeight->setText(QString::number(members[uiData].memberMaterial.unitWeight()));
+    ui->unitWeight->setText(QString::number(avoidPrecision(members[uiData].memberMaterial.unitWeight())));
     ui->changeMember->setEnabled(1);
     ui->addLoad->setEnabled(1);
     ui->addLoad->setText("Add/Change \nLoads");
@@ -455,69 +445,6 @@ void MainWindow::on_zFixity_stateChanged(int arg1)
     }
 }
 
-// drawing nodes according to the fixities to GL
-void MainWindow::drawNodes(bool bXFixity,bool bYFixity,bool bZFixity,int iXStiffness,int iYStiffness,int iZStiffness,double dbXCoordinate,double dbYCoordinate){
-    ui->openGLWidget->nodeDraw(dbXCoordinate,dbYCoordinate);
-    if (bXFixity == true && bYFixity == true && bZFixity == false){
-        ui->openGLWidget->pinSupport(dbXCoordinate,dbYCoordinate);
-        if (iZStiffness != 0){
-            ui->openGLWidget->zSpring(float(dbXCoordinate),float(dbYCoordinate),0.25,100);
-        }
-    }
-    else if (bXFixity == true && bYFixity == true && bZFixity == true){
-        ui->openGLWidget->fixedSupport(dbXCoordinate,dbYCoordinate);
-    }
-    else if (bXFixity == false && bYFixity == true && bZFixity == false){
-        ui->openGLWidget->rollerSupport(dbXCoordinate,dbYCoordinate,0);
-        if (iXStiffness != 0){
-            ui->openGLWidget->xSpring(dbXCoordinate,dbYCoordinate);
-        }
-        if (iZStiffness != 0){
-            ui->openGLWidget->zSpring(float(dbXCoordinate),float(dbYCoordinate),0.25,100);
-        }
-    }
-    else if (bXFixity == true && bYFixity == false && bZFixity == false){
-        ui->openGLWidget->rollerSupport(dbXCoordinate,dbYCoordinate,1);
-        if (iYStiffness != 0){
-            ui->openGLWidget->ySpring(dbXCoordinate,dbYCoordinate);
-        }
-        if (iZStiffness != 0){
-            ui->openGLWidget->zSpring(float(dbXCoordinate),float(dbYCoordinate),0.25,100);
-        }
-    }
-    else if (bXFixity == true && bYFixity == false && bZFixity == true){
-        ui->openGLWidget->fixedRollerSupport(dbXCoordinate,dbYCoordinate,1);
-        if (iYStiffness != 0){
-            ui->openGLWidget->ySpring(dbXCoordinate,dbYCoordinate);
-        }
-    }
-    else if (bXFixity == false && bYFixity == true && bZFixity == true){
-        ui->openGLWidget->fixedRollerSupport(dbXCoordinate,dbYCoordinate,0);
-        if (iXStiffness != 0){
-            ui->openGLWidget->xSpring(dbXCoordinate,dbYCoordinate);
-        }
-    }
-    else if (bXFixity == false && bYFixity == false && bZFixity == true){
-        ui->openGLWidget->rotZeroSupport(dbXCoordinate,dbYCoordinate);
-        if (iXStiffness != 0){
-            ui->openGLWidget->xSpring(dbXCoordinate,dbYCoordinate);
-        }
-        if (iYStiffness != 0){
-            ui->openGLWidget->ySpring(dbXCoordinate,dbYCoordinate);
-        }
-    }
-    else if (bXFixity == false && bYFixity == false && bZFixity == false){
-        if (iXStiffness != 0){
-            ui->openGLWidget->xSpring(dbXCoordinate,dbYCoordinate);
-        }
-        if (iYStiffness != 0){
-            ui->openGLWidget->ySpring(dbXCoordinate,dbYCoordinate);
-        }
-        if (iZStiffness != 0){
-            ui->openGLWidget->zSpring(float(dbXCoordinate),float(dbYCoordinate),0.25,100);
-        }
-    }
-}
 
 
 

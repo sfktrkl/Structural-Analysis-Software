@@ -19,6 +19,8 @@ public:
     void initializeGL();
     void paintGL();
     void resizeGL(int w,int h);
+
+    void checkNode(bool bXFixity,bool bYFixity,bool bZFixity,double dbXStiffness,double dbYStiffness,double dbZStiffness,double dbXCoordinate,double dbYCoordinate);
     void clearGL();
     void LineDraw(double xCoor1,double yCoor1,double xCoor2,double yCoor2);
     void nodeDraw(double xCoor1,double yCoor1);

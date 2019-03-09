@@ -58,6 +58,7 @@ private slots:
     void complexExampleTest();
     void xmlOpenTest();
     void xmlOpenTest2();
+    void internalForcesandSupportReactionsTest();
 private:
 
 };
@@ -169,6 +170,26 @@ void TestCase::xmlOpenTest2(){
     QVERIFY(comparison);
 }
 
-QTEST_MAIN(TestCase)
+void TestCase::internalForcesandSupportReactionsTest()
+{
+    // Adjust your file path
+    QString filePath = "D:/GoogleDrive/Programs/c++/SASWithTest/SASTest/openGLtest.xml";
+    MainWindow::OpenXML(filePath);
+    MainWindow::solveStructure();
+    QCOMPARE(round(MainWindow::members[2].GetLocalMatrix()[1][2]),int(1000));
+    QCOMPARE(round(MainWindow::members[2].GetGlobalMatrix()[1][1]),int(1202));
+    QCOMPARE(round(MainWindow::members[0].GetLocalFEMMatrix()[1][0]),int(25));
+    QCOMPARE(round(MainWindow::members[0].GetGlobalFEMMatrix()[1][0]),int(25));
+    QCOMPARE(round(MainWindow::KGlobalMatrix[2][2]),6500);
+    QCOMPARE(round(MainWindow::FGlobalMatrix[2][0]),100);
+    bool comparison = MainWindow::Deflections[0][0] < 0.042 && MainWindow::Deflections[0][0] > 0.041;
+    QVERIFY(comparison);
+    QCOMPARE(round(MainWindow::members[1].memberLocalForces[2][0]),int(-125));
+    QCOMPARE(round(MainWindow::members[2].memberGlobalForces[0][0]),int(59));
+    QCOMPARE(round(MainWindow::members[2].memberInternalForces[4][0]),int(19));
+    QCOMPARE(round(MainWindow::nodes[1].supportReactions[1]),int(100));
+    QCOMPARE(round(MainWindow::nodes[2].supportReactions[2]),int(-4));
+}
 
+QTEST_MAIN(TestCase)
 #include "tst_testcase.moc"

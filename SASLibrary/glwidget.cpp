@@ -1,11 +1,12 @@
 #include "glwidget.h"
 #include "math.h"
 #include "library.h"
+#include "mainwindow.h"
 
 GLWidget::GLWidget(QWidget *parent) : QGLWidget (parent)
 {
-    //connect(&timer,SIGNAL(timeout()),this,SLOT(updateGL()));
-    //timer.start(4);
+    connect(&timer,SIGNAL(timeout()),this,SLOT(updateGL()));
+    timer.start(100);
 }
 
 // initializing gl to widget
@@ -14,38 +15,130 @@ void GLWidget::initializeGL(){
     glClear(GL_COLOR_BUFFER_BIT);
 }
 void GLWidget::paintGL(){
+    if (activated == true){
+        glClear(GL_COLOR_BUFFER_BIT);
+        drawGrids();
+        // check every member to take material dimensions and coordinates
+        double xCoor,yCoor,xCoor2,yCoor2;
+        for (unsigned int i = 0;i < Member::numOfMembers;i++){
+            xCoor = MainWindow::members[i].memberNodes[0].GetXCoordinate();
+            yCoor = MainWindow::members[i].memberNodes[0].GetYCoordinate();
+            xCoor2 = MainWindow::members[i].memberNodes[1].GetXCoordinate();
+            yCoor2 = MainWindow::members[i].memberNodes[1].GetYCoordinate();
+            LineDraw(xCoor,yCoor,xCoor2,yCoor2);
+        }
+        // check every node to find support type and coordinates
+        double dbXStiffness,dbYStiffness,dbZStiffness, dbOffset;
+        bool bXFixity,bYFixity,bZFixity;
+        for (unsigned int i =0 ; i < Node::numOfNodes;i++){
+            xCoor = MainWindow::nodes[i].GetXCoordinate();
+            yCoor = MainWindow::nodes[i].GetYCoordinate();
+            dbXStiffness = MainWindow::nodes[i].GetStiffness()[0];
+            dbYStiffness = MainWindow::nodes[i].GetStiffness()[1];
+            dbZStiffness = MainWindow::nodes[i].GetStiffness()[2];
+            bXFixity = MainWindow::nodes[i].GetNodeFixity()[0];
+            bYFixity = MainWindow::nodes[i].GetNodeFixity()[1];
+            bZFixity = MainWindow::nodes[i].GetNodeFixity()[2];
+            dbOffset = MainWindow::nodes[i].GetOffset();
+            checkNode(bXFixity,  bYFixity,  bZFixity,  dbXStiffness,  dbYStiffness,  dbZStiffness, xCoor, yCoor);
+            nodeDraw(xCoor,yCoor);
+        }
+    }
 }
+
 //  arranges size of GL according to aspect ratio
 void GLWidget::resizeGL(int w,int h){
+    glViewport(0,0,w,h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glViewport(0,0,w,h);
     glOrtho(-2*aspectratio,10*aspectratio,-2*aspectratio,5*aspectratio,1,-1);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    swapBuffers();
 }
+
+// drawing nodes according to the fixities to GL
+void GLWidget::checkNode(bool bXFixity,bool bYFixity,bool bZFixity,double dbXStiffness,double dbYStiffness,double dbZStiffness,double dbXCoordinate,double dbYCoordinate){
+    nodeDraw(dbXCoordinate,dbYCoordinate);
+    if (bXFixity == true && bYFixity == true && bZFixity == false){
+        pinSupport(dbXCoordinate,dbYCoordinate);
+        if (QString::number(dbZStiffness) != "0"){
+            zSpring(float(dbXCoordinate),float(dbYCoordinate),0.25,100);
+        }
+    }
+    else if (bXFixity == true && bYFixity == true && bZFixity == true){
+        fixedSupport(dbXCoordinate,dbYCoordinate);
+    }
+    else if (bXFixity == false && bYFixity == true && bZFixity == false){
+        rollerSupport(dbXCoordinate,dbYCoordinate,0);
+        if (QString::number(dbXStiffness) != "0"){
+            xSpring(dbXCoordinate,dbYCoordinate);
+        }
+        if (QString::number(dbZStiffness) != "0"){
+            zSpring(float(dbXCoordinate),float(dbYCoordinate),0.25,100);
+        }
+    }
+    else if (bXFixity == true && bYFixity == false && bZFixity == false){
+        rollerSupport(dbXCoordinate,dbYCoordinate,1);
+        if (QString::number(dbYStiffness) != "0"){
+            ySpring(dbXCoordinate,dbYCoordinate);
+        }
+        if (QString::number(dbZStiffness) != "0"){
+            zSpring(float(dbXCoordinate),float(dbYCoordinate),0.25,100);
+        }
+    }
+    else if (bXFixity == true && bYFixity == false && bZFixity == true){
+        fixedRollerSupport(dbXCoordinate,dbYCoordinate,1);
+        if (QString::number(dbYStiffness) != "0"){
+            ySpring(dbXCoordinate,dbYCoordinate);
+        }
+    }
+    else if (bXFixity == false && bYFixity == true && bZFixity == true){
+        fixedRollerSupport(dbXCoordinate,dbYCoordinate,0);
+        if (QString::number(dbXStiffness) != "0"){
+            xSpring(dbXCoordinate,dbYCoordinate);
+        }
+    }
+    else if (bXFixity == false && bYFixity == false && bZFixity == true){
+        rotZeroSupport(dbXCoordinate,dbYCoordinate);
+        if (QString::number(dbXStiffness) != "0"){
+            xSpring(dbXCoordinate,dbYCoordinate);
+        }
+        if (QString::number(dbYStiffness) != "0"){
+            ySpring(dbXCoordinate,dbYCoordinate);
+        }
+    }
+    else if (bXFixity == false && bYFixity == false && bZFixity == false){
+        if (QString::number(dbXStiffness) != "0"){
+            xSpring(dbXCoordinate,dbYCoordinate);
+        }
+        if (QString::number(dbYStiffness) != "0"){
+            ySpring(dbXCoordinate,dbYCoordinate);
+        }
+        if (QString::number(dbZStiffness) != "0"){
+            zSpring(float(dbXCoordinate),float(dbYCoordinate),0.25,100);
+        }
+    }
+}
+
+
+
 // clearing GL
 void GLWidget::clearGL(){
     glClearColor(GLfloat(0.2),GLfloat(0.2),GLfloat(0.2),GLfloat(1));
     glClear(GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
-    swapBuffers();
 }
 // drawes lines according to member properties
 void GLWidget::LineDraw(double xCoor1,double yCoor1,double xCoor2,double yCoor2){
-    swapBuffers();
     glColor3f(1,0,0);
     glLineWidth(3);
     glBegin(GL_LINES);
         glVertex2f(GLfloat(xCoor1),GLfloat(yCoor1));
         glVertex2f(GLfloat(xCoor2),GLfloat(yCoor2));
     glEnd();
-    swapBuffers();
 }
 // draws points so node coordinates
 void GLWidget::nodeDraw(double xCoor1,double yCoor1){
-    swapBuffers();
     glColor3f(1,1,1);
     glBegin(GL_POLYGON);
         glVertex2f(GLfloat(xCoor1-0.05),GLfloat(yCoor1-0.05));
@@ -53,11 +146,9 @@ void GLWidget::nodeDraw(double xCoor1,double yCoor1){
         glVertex2f(GLfloat(xCoor1+0.05),GLfloat(yCoor1+0.05));
         glVertex2f(GLfloat(xCoor1-0.05),GLfloat(yCoor1+0.05));
     glEnd();
-    swapBuffers();
 }
 // creates pin support visuals to GL
 void GLWidget::pinSupport(double xCoor1,double yCoor1){
-    swapBuffers();
     glColor3f(0,1,0);
     glLineWidth(1);
     glBegin(GL_TRIANGLES);
@@ -72,12 +163,10 @@ void GLWidget::pinSupport(double xCoor1,double yCoor1){
         glVertex2f(GLfloat(xCoor1+0.05),GLfloat(yCoor1+0.05));
         glVertex2f(GLfloat(xCoor1-0.05),GLfloat(yCoor1+0.05));
     glEnd();
-    swapBuffers();
 }
 // creates roller support visuals to GL
 void GLWidget::rollerSupport(double xCoor1,double yCoor1,int rotation){
     if (rotation == 0){
-        swapBuffers();
         glColor3f(0,1,0);
         glLineWidth(1);
         glBegin(GL_TRIANGLES);
@@ -90,10 +179,8 @@ void GLWidget::rollerSupport(double xCoor1,double yCoor1,int rotation){
             glVertex2f(GLfloat(xCoor1+0.25),GLfloat(yCoor1-0.75));
             glVertex2f(GLfloat(xCoor1-0.25),GLfloat(yCoor1-0.75));
         glEnd();
-        swapBuffers();
     }
     else{
-        swapBuffers();
         glColor3f(0,1,0);
         glLineWidth(1);
         glBegin(GL_TRIANGLES);
@@ -106,12 +193,10 @@ void GLWidget::rollerSupport(double xCoor1,double yCoor1,int rotation){
             glVertex2f(GLfloat(xCoor1+0.75),GLfloat(yCoor1-0.25));
             glVertex2f(GLfloat(xCoor1+0.75),GLfloat(yCoor1+0.25));
         glEnd();
-        swapBuffers();
     }
 }
 // creates fixed support visuals to GL
 void GLWidget::fixedSupport(double xCoor1,double yCoor1){
-    swapBuffers();
     glColor3f(0,1,0);
     glLineWidth(1);
     glBegin(GL_POLYGON);
@@ -120,13 +205,11 @@ void GLWidget::fixedSupport(double xCoor1,double yCoor1){
         glVertex2f(GLfloat(xCoor1+0.25),GLfloat(yCoor1-0.3));
         glVertex2f(GLfloat(xCoor1-0.25),GLfloat(yCoor1-0.3));
     glEnd();
-    swapBuffers();
 
 }
 // creates fixed support visuals to GL according to orientation of support
 void GLWidget::fixedRollerSupport(double xCoor1,double yCoor1,int rotation){
     if (rotation == 0){
-        swapBuffers();
         glColor3f(0,1,0);
         glLineWidth(1);
         glBegin(GL_POLYGON);
@@ -139,11 +222,9 @@ void GLWidget::fixedRollerSupport(double xCoor1,double yCoor1,int rotation){
             glVertex2f(GLfloat(xCoor1-0.25),GLfloat(yCoor1-0.5));
             glVertex2f(GLfloat(xCoor1+0.25),GLfloat(yCoor1-0.5));
         glEnd();
-        swapBuffers();
 
     }
     else{
-        swapBuffers();
         glColor3f(0,1,0);
         glLineWidth(1);
         glBegin(GL_POLYGON);
@@ -156,13 +237,11 @@ void GLWidget::fixedRollerSupport(double xCoor1,double yCoor1,int rotation){
             glVertex2f(GLfloat(xCoor1+0.5),GLfloat(yCoor1-0.25));
             glVertex2f(GLfloat(xCoor1+0.5),GLfloat(yCoor1+0.25));
         glEnd();
-        swapBuffers();
 
     }
 }
 // creates rotation fixed support (rotation fixed only) visuals to GL
 void GLWidget::rotZeroSupport(double xCoor1,double yCoor1){
-    swapBuffers();
     glColor3f(0,0,1);
     glLineWidth(1);
     glBegin(GL_POLYGON);
@@ -171,11 +250,9 @@ void GLWidget::rotZeroSupport(double xCoor1,double yCoor1){
         glVertex2f(GLfloat(xCoor1+0.15),GLfloat(yCoor1+0.15));
         glVertex2f(GLfloat(xCoor1-0.15),GLfloat(yCoor1+0.15));
     glEnd();
-    swapBuffers();
 }
 // creates simple spring with orientation of X axis
 void GLWidget::xSpring(double xCoor1,double yCoor1){
-    swapBuffers();
     glColor3f(1.0f, 0.5f, 0.0f);    //Orange
     glLineWidth(1);
     glBegin(GL_LINES);
@@ -208,12 +285,10 @@ void GLWidget::xSpring(double xCoor1,double yCoor1){
         glVertex2f(GLfloat(xCoor1-0.6),GLfloat(yCoor1-0.2));
         glVertex2f(GLfloat(xCoor1-0.6),GLfloat(yCoor1+0.2));
     glEnd();
-    swapBuffers();
 
 }
 // creates simple spring with orientation of Y axis
 void GLWidget::ySpring(double xCoor1,double yCoor1){
-    swapBuffers();
     glColor3f(1.0f, 0.5f, 0.0f);    //Orange
     glLineWidth(1);
     glBegin(GL_LINES);
@@ -246,12 +321,10 @@ void GLWidget::ySpring(double xCoor1,double yCoor1){
         glVertex2f(GLfloat(xCoor1-0.15),GLfloat(yCoor1-0.6));
         glVertex2f(GLfloat(xCoor1+0.15),GLfloat(yCoor1-0.6));
     glEnd();
-    swapBuffers();
 
 }
 // creates simple spring with orientation of Z axis
 void GLWidget::zSpring(float xCoor1, float yCoor1, float r, int num_segments){
-    swapBuffers();
     double xCoor = double(xCoor1);
     double yCoor = double(yCoor1);
     glColor3f(1.0f, 0.5f, 0.0f);    //Orange
@@ -285,7 +358,6 @@ void GLWidget::zSpring(float xCoor1, float yCoor1, float r, int num_segments){
         glVertex2f(GLfloat(xCoor+0.4),GLfloat(yCoor-0.4));
         glVertex2f(GLfloat(xCoor+0.4),GLfloat(yCoor+0.4));
     glEnd();
-    swapBuffers();
 }
 // updadets the GL axes according to inputs
 void GLWidget::sizeUpdateGL(int maxW,int maxH){
@@ -296,11 +368,9 @@ void GLWidget::sizeUpdateGL(int maxW,int maxH){
     glOrtho(-2*aspectratio,maxW*aspectratio,-2*aspectratio,maxH*aspectratio,1,-1);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    swapBuffers();
 }
 // draws grids
 void GLWidget::drawGrids(){
-    swapBuffers();
     glColor3f(GLfloat(0.1),GLfloat(0.1),GLfloat(0.1));
     glLineWidth(0.5);
     for (int i = 0; i<maxW*3;i++){
@@ -333,7 +403,6 @@ void GLWidget::drawGrids(){
             glVertex2f(GLfloat(maxW*2),GLfloat(-3+i));
         glEnd();
     }
-    swapBuffers();
 
 }
 
